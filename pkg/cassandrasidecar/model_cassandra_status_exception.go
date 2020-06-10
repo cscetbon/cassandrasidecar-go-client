@@ -9,7 +9,105 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // CassandraStatusException struct for CassandraStatusException
 type CassandraStatusException struct {
-	Exception map[string]interface{} `json:"exception,omitempty"`
+	Exception *map[string]interface{} `json:"exception,omitempty"`
+}
+
+// NewCassandraStatusException instantiates a new CassandraStatusException object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewCassandraStatusException() *CassandraStatusException {
+	this := CassandraStatusException{}
+	return &this
+}
+
+// NewCassandraStatusExceptionWithDefaults instantiates a new CassandraStatusException object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewCassandraStatusExceptionWithDefaults() *CassandraStatusException {
+	this := CassandraStatusException{}
+	return &this
+}
+
+// GetException returns the Exception field value if set, zero value otherwise.
+func (o *CassandraStatusException) GetException() map[string]interface{} {
+	if o == nil || o.Exception == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return *o.Exception
+}
+
+// GetExceptionOk returns a tuple with the Exception field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CassandraStatusException) GetExceptionOk() (*map[string]interface{}, bool) {
+	if o == nil || o.Exception == nil {
+		return nil, false
+	}
+	return o.Exception, true
+}
+
+// HasException returns a boolean if a field has been set.
+func (o *CassandraStatusException) HasException() bool {
+	if o != nil && o.Exception != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetException gets a reference to the given map[string]interface{} and assigns it to the Exception field.
+func (o *CassandraStatusException) SetException(v map[string]interface{}) {
+	o.Exception = &v
+}
+
+func (o CassandraStatusException) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if o.Exception != nil {
+		toSerialize["exception"] = o.Exception
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableCassandraStatusException struct {
+	value *CassandraStatusException
+	isSet bool
+}
+
+func (v NullableCassandraStatusException) Get() *CassandraStatusException {
+	return v.value
+}
+
+func (v *NullableCassandraStatusException) Set(val *CassandraStatusException) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableCassandraStatusException) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableCassandraStatusException) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableCassandraStatusException(val *CassandraStatusException) *NullableCassandraStatusException {
+	return &NullableCassandraStatusException{value: val, isSet: true}
+}
+
+func (v NullableCassandraStatusException) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableCassandraStatusException) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

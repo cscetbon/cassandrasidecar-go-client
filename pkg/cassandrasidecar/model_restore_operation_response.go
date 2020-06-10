@@ -9,9 +9,12 @@
  */
 
 package cassandrasidecar
+
 import (
+	"encoding/json"
 	"time"
 )
+
 // RestoreOperationResponse struct for RestoreOperationResponse
 type RestoreOperationResponse struct {
 	// type of operation, one has to set it to 'restore' in case he wants this request to be considered as a backup one 
@@ -25,44 +28,963 @@ type RestoreOperationResponse struct {
 	// timestamp telling when this operation was created on Sidecar's side 
 	CreationTime time.Time `json:"creationTime"`
 	// timestamp telling when this operation was started by Sidecar, if an operation is created, it does not necessarily mean that it will be started right away, in most cases it is the case but if e.g. ExecutorService is full on its working thread, an execution of an operation is postponed and start time is updated only after that 
-	StartTime time.Time `json:"startTime,omitempty"`
+	StartTime *time.Time `json:"startTime,omitempty"`
 	// timestamp telling when an operation has finished, irrelevant of its result, an operation can be failed and it would still have this field populated. 
-	CompletionTime time.Time `json:"completionTime,omitempty"`
+	CompletionTime *time.Time `json:"completionTime,omitempty"`
 	// This field contains serialized java.lang.Throwable in case this operation has failed 
-	FailureCause map[string]interface{} `json:"failureCause,omitempty"`
+	FailureCause *map[string]interface{} `json:"failureCause,omitempty"`
 	// similar to field in backup request but used for telling from where files should be downloaded, not uploaded, in case globalRequest field is set to true, it does not matter what dc and node id is used, these components in storageLocation path will be automatically changed. 
 	StorageLocation string `json:"storageLocation"`
 	// similar to field in backup request but used for downloading files, not uploading them 
-	ConcurrentConnections int32 `json:"concurrentConnections,omitempty"`
+	ConcurrentConnections *int32 `json:"concurrentConnections,omitempty"`
 	// similar to field in backup request 
-	LockFile string `json:"lockFile,omitempty"`
+	LockFile *string `json:"lockFile,omitempty"`
 	// similar to field in backup request 
-	CassandraDirectory string `json:"cassandraDirectory,omitempty"`
+	CassandraDirectory *string `json:"cassandraDirectory,omitempty"`
 	// directory where one expects to find 'conf/cassandra.yaml' file in case we need to update it with initial tokens in case restoration strategy is IN_PLACE. 
-	CassandraConfigDirectory string `json:"cassandraConfigDirectory,omitempty"`
+	CassandraConfigDirectory *string `json:"cassandraConfigDirectory,omitempty"`
 	// a flag saying if we should restore system keyspaces as well, relevant only for IN_PLACE restoration 
-	RestoreSystemKeyspace bool `json:"restoreSystemKeyspace,omitempty"`
+	RestoreSystemKeyspace *bool `json:"restoreSystemKeyspace,omitempty"`
 	// name of snapshot to restore 
 	SnapshotTag string `json:"snapshotTag"`
 	// similar to field in backup request, when empty, all entities in given snapshot will be restored 
-	Entities string `json:"entities,omitempty"`
+	Entities *string `json:"entities,omitempty"`
 	// flag telling if cassandra.yaml should be updated with initial_tokens, relevant only in case of IN_PLACE strategy 
-	UpdateCassandraYaml bool `json:"updateCassandraYaml,omitempty"`
+	UpdateCassandraYaml *bool `json:"updateCassandraYaml,omitempty"`
 	// strategy telling how we should go about restoration, please refer to details in backup and sidecar documentation 
-	RestorationStrategyType string `json:"restorationStrategyType,omitempty"`
+	RestorationStrategyType *string `json:"restorationStrategyType,omitempty"`
 	// phase telling what should we do, this field has to be set just once as DOWNLOAD if globalRequest if true and coordinator of that request will take care of all other phases automatically on its own 
-	RestorationPhase string `json:"restorationPhase,omitempty"`
+	RestorationPhase *string `json:"restorationPhase,omitempty"`
 	// flag saying if we should not delete truncated SSTables after they are imported, as part of CLEANUP phase, defaults to false 
-	NoDeleteTruncates bool `json:"noDeleteTruncates,omitempty"`
+	NoDeleteTruncates *bool `json:"noDeleteTruncates,omitempty"`
 	// flag saying if we should not delete downloaded SSTables from remote location, as part of CLEANUP phase, defaults to false 
-	NoDeleteDownloads bool `json:"noDeleteDownloads,omitempty"`
+	NoDeleteDownloads *bool `json:"noDeleteDownloads,omitempty"`
 	// flag saying if we should not download data from remote location as we expect them to be there already, defaults to false, setting this to true has sense only in case noDeleteDownloads was set to true in previous restoration requests 
-	NoDownloadData bool `json:"noDownloadData,omitempty"`
+	NoDownloadData *bool `json:"noDownloadData,omitempty"`
 	// version of schema we want to restore from, upon backup, a schema version is automatically appended to snapshot name and its manifest is uploaded under that name. In case we have two snapshots having same name, we might distinguish between them by this schema version. If schema version is not specified, we expect that there will be one and only one backup taken with respective snapshot name. This schema version has to match the version of a Cassandra node we are doing restore for (hence, by proxy, when global request mode is used, all nodes have to be on exact same schema version). 
-	SchemaVersion string `json:"schemaVersion,omitempty"`
+	SchemaVersion *string `json:"schemaVersion,omitempty"`
 	// flag saying if we indeed want a schema version of a running node match with schema version a snapshot is taken on. there might be cases when we want to restore a table for which its CQL schema has not changed but it has changed for other table / keyspace but a schema for that node has changed by doing that. 
-	ExactSchemaVersion bool `json:"exactSchemaVersion,omitempty"`
-	Import ImportOperationRequest `json:"import,omitempty"`
+	ExactSchemaVersion *bool `json:"exactSchemaVersion,omitempty"`
+	Import *ImportOperationRequest `json:"import,omitempty"`
 	// flag saying that this request is a global one, meaning that a Sidecar this request is sent to will act as a restoration coordinator sending all other requests to each node in a cluster, for each phase. 
-	GlobalRequest bool `json:"globalRequest,omitempty"`
+	GlobalRequest *bool `json:"globalRequest,omitempty"`
+}
+
+// NewRestoreOperationResponse instantiates a new RestoreOperationResponse object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewRestoreOperationResponse(type_ string, id string, state string, progress float32, creationTime time.Time, storageLocation string, snapshotTag string, ) *RestoreOperationResponse {
+	this := RestoreOperationResponse{}
+	this.Type = type_
+	this.Id = id
+	this.State = state
+	this.Progress = progress
+	this.CreationTime = creationTime
+	this.StorageLocation = storageLocation
+	this.SnapshotTag = snapshotTag
+	return &this
+}
+
+// NewRestoreOperationResponseWithDefaults instantiates a new RestoreOperationResponse object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewRestoreOperationResponseWithDefaults() *RestoreOperationResponse {
+	this := RestoreOperationResponse{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *RestoreOperationResponse) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *RestoreOperationResponse) SetType(v string) {
+	o.Type = v
+}
+
+// GetId returns the Id field value
+func (o *RestoreOperationResponse) GetId() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *RestoreOperationResponse) SetId(v string) {
+	o.Id = v
+}
+
+// GetState returns the State field value
+func (o *RestoreOperationResponse) GetState() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.State
+}
+
+// GetStateOk returns a tuple with the State field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetStateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.State, true
+}
+
+// SetState sets field value
+func (o *RestoreOperationResponse) SetState(v string) {
+	o.State = v
+}
+
+// GetProgress returns the Progress field value
+func (o *RestoreOperationResponse) GetProgress() float32 {
+	if o == nil  {
+		var ret float32
+		return ret
+	}
+
+	return o.Progress
+}
+
+// GetProgressOk returns a tuple with the Progress field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetProgressOk() (*float32, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Progress, true
+}
+
+// SetProgress sets field value
+func (o *RestoreOperationResponse) SetProgress(v float32) {
+	o.Progress = v
+}
+
+// GetCreationTime returns the CreationTime field value
+func (o *RestoreOperationResponse) GetCreationTime() time.Time {
+	if o == nil  {
+		var ret time.Time
+		return ret
+	}
+
+	return o.CreationTime
+}
+
+// GetCreationTimeOk returns a tuple with the CreationTime field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetCreationTimeOk() (*time.Time, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CreationTime, true
+}
+
+// SetCreationTime sets field value
+func (o *RestoreOperationResponse) SetCreationTime(v time.Time) {
+	o.CreationTime = v
+}
+
+// GetStartTime returns the StartTime field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetStartTime() time.Time {
+	if o == nil || o.StartTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.StartTime
+}
+
+// GetStartTimeOk returns a tuple with the StartTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetStartTimeOk() (*time.Time, bool) {
+	if o == nil || o.StartTime == nil {
+		return nil, false
+	}
+	return o.StartTime, true
+}
+
+// HasStartTime returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasStartTime() bool {
+	if o != nil && o.StartTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStartTime gets a reference to the given time.Time and assigns it to the StartTime field.
+func (o *RestoreOperationResponse) SetStartTime(v time.Time) {
+	o.StartTime = &v
+}
+
+// GetCompletionTime returns the CompletionTime field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetCompletionTime() time.Time {
+	if o == nil || o.CompletionTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CompletionTime
+}
+
+// GetCompletionTimeOk returns a tuple with the CompletionTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetCompletionTimeOk() (*time.Time, bool) {
+	if o == nil || o.CompletionTime == nil {
+		return nil, false
+	}
+	return o.CompletionTime, true
+}
+
+// HasCompletionTime returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasCompletionTime() bool {
+	if o != nil && o.CompletionTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCompletionTime gets a reference to the given time.Time and assigns it to the CompletionTime field.
+func (o *RestoreOperationResponse) SetCompletionTime(v time.Time) {
+	o.CompletionTime = &v
+}
+
+// GetFailureCause returns the FailureCause field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetFailureCause() map[string]interface{} {
+	if o == nil || o.FailureCause == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return *o.FailureCause
+}
+
+// GetFailureCauseOk returns a tuple with the FailureCause field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetFailureCauseOk() (*map[string]interface{}, bool) {
+	if o == nil || o.FailureCause == nil {
+		return nil, false
+	}
+	return o.FailureCause, true
+}
+
+// HasFailureCause returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasFailureCause() bool {
+	if o != nil && o.FailureCause != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureCause gets a reference to the given map[string]interface{} and assigns it to the FailureCause field.
+func (o *RestoreOperationResponse) SetFailureCause(v map[string]interface{}) {
+	o.FailureCause = &v
+}
+
+// GetStorageLocation returns the StorageLocation field value
+func (o *RestoreOperationResponse) GetStorageLocation() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.StorageLocation
+}
+
+// GetStorageLocationOk returns a tuple with the StorageLocation field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetStorageLocationOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.StorageLocation, true
+}
+
+// SetStorageLocation sets field value
+func (o *RestoreOperationResponse) SetStorageLocation(v string) {
+	o.StorageLocation = v
+}
+
+// GetConcurrentConnections returns the ConcurrentConnections field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetConcurrentConnections() int32 {
+	if o == nil || o.ConcurrentConnections == nil {
+		var ret int32
+		return ret
+	}
+	return *o.ConcurrentConnections
+}
+
+// GetConcurrentConnectionsOk returns a tuple with the ConcurrentConnections field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetConcurrentConnectionsOk() (*int32, bool) {
+	if o == nil || o.ConcurrentConnections == nil {
+		return nil, false
+	}
+	return o.ConcurrentConnections, true
+}
+
+// HasConcurrentConnections returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasConcurrentConnections() bool {
+	if o != nil && o.ConcurrentConnections != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetConcurrentConnections gets a reference to the given int32 and assigns it to the ConcurrentConnections field.
+func (o *RestoreOperationResponse) SetConcurrentConnections(v int32) {
+	o.ConcurrentConnections = &v
+}
+
+// GetLockFile returns the LockFile field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetLockFile() string {
+	if o == nil || o.LockFile == nil {
+		var ret string
+		return ret
+	}
+	return *o.LockFile
+}
+
+// GetLockFileOk returns a tuple with the LockFile field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetLockFileOk() (*string, bool) {
+	if o == nil || o.LockFile == nil {
+		return nil, false
+	}
+	return o.LockFile, true
+}
+
+// HasLockFile returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasLockFile() bool {
+	if o != nil && o.LockFile != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetLockFile gets a reference to the given string and assigns it to the LockFile field.
+func (o *RestoreOperationResponse) SetLockFile(v string) {
+	o.LockFile = &v
+}
+
+// GetCassandraDirectory returns the CassandraDirectory field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetCassandraDirectory() string {
+	if o == nil || o.CassandraDirectory == nil {
+		var ret string
+		return ret
+	}
+	return *o.CassandraDirectory
+}
+
+// GetCassandraDirectoryOk returns a tuple with the CassandraDirectory field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetCassandraDirectoryOk() (*string, bool) {
+	if o == nil || o.CassandraDirectory == nil {
+		return nil, false
+	}
+	return o.CassandraDirectory, true
+}
+
+// HasCassandraDirectory returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasCassandraDirectory() bool {
+	if o != nil && o.CassandraDirectory != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCassandraDirectory gets a reference to the given string and assigns it to the CassandraDirectory field.
+func (o *RestoreOperationResponse) SetCassandraDirectory(v string) {
+	o.CassandraDirectory = &v
+}
+
+// GetCassandraConfigDirectory returns the CassandraConfigDirectory field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetCassandraConfigDirectory() string {
+	if o == nil || o.CassandraConfigDirectory == nil {
+		var ret string
+		return ret
+	}
+	return *o.CassandraConfigDirectory
+}
+
+// GetCassandraConfigDirectoryOk returns a tuple with the CassandraConfigDirectory field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetCassandraConfigDirectoryOk() (*string, bool) {
+	if o == nil || o.CassandraConfigDirectory == nil {
+		return nil, false
+	}
+	return o.CassandraConfigDirectory, true
+}
+
+// HasCassandraConfigDirectory returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasCassandraConfigDirectory() bool {
+	if o != nil && o.CassandraConfigDirectory != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCassandraConfigDirectory gets a reference to the given string and assigns it to the CassandraConfigDirectory field.
+func (o *RestoreOperationResponse) SetCassandraConfigDirectory(v string) {
+	o.CassandraConfigDirectory = &v
+}
+
+// GetRestoreSystemKeyspace returns the RestoreSystemKeyspace field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetRestoreSystemKeyspace() bool {
+	if o == nil || o.RestoreSystemKeyspace == nil {
+		var ret bool
+		return ret
+	}
+	return *o.RestoreSystemKeyspace
+}
+
+// GetRestoreSystemKeyspaceOk returns a tuple with the RestoreSystemKeyspace field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetRestoreSystemKeyspaceOk() (*bool, bool) {
+	if o == nil || o.RestoreSystemKeyspace == nil {
+		return nil, false
+	}
+	return o.RestoreSystemKeyspace, true
+}
+
+// HasRestoreSystemKeyspace returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasRestoreSystemKeyspace() bool {
+	if o != nil && o.RestoreSystemKeyspace != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRestoreSystemKeyspace gets a reference to the given bool and assigns it to the RestoreSystemKeyspace field.
+func (o *RestoreOperationResponse) SetRestoreSystemKeyspace(v bool) {
+	o.RestoreSystemKeyspace = &v
+}
+
+// GetSnapshotTag returns the SnapshotTag field value
+func (o *RestoreOperationResponse) GetSnapshotTag() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.SnapshotTag
+}
+
+// GetSnapshotTagOk returns a tuple with the SnapshotTag field value
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetSnapshotTagOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.SnapshotTag, true
+}
+
+// SetSnapshotTag sets field value
+func (o *RestoreOperationResponse) SetSnapshotTag(v string) {
+	o.SnapshotTag = v
+}
+
+// GetEntities returns the Entities field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetEntities() string {
+	if o == nil || o.Entities == nil {
+		var ret string
+		return ret
+	}
+	return *o.Entities
+}
+
+// GetEntitiesOk returns a tuple with the Entities field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetEntitiesOk() (*string, bool) {
+	if o == nil || o.Entities == nil {
+		return nil, false
+	}
+	return o.Entities, true
+}
+
+// HasEntities returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasEntities() bool {
+	if o != nil && o.Entities != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetEntities gets a reference to the given string and assigns it to the Entities field.
+func (o *RestoreOperationResponse) SetEntities(v string) {
+	o.Entities = &v
+}
+
+// GetUpdateCassandraYaml returns the UpdateCassandraYaml field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetUpdateCassandraYaml() bool {
+	if o == nil || o.UpdateCassandraYaml == nil {
+		var ret bool
+		return ret
+	}
+	return *o.UpdateCassandraYaml
+}
+
+// GetUpdateCassandraYamlOk returns a tuple with the UpdateCassandraYaml field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetUpdateCassandraYamlOk() (*bool, bool) {
+	if o == nil || o.UpdateCassandraYaml == nil {
+		return nil, false
+	}
+	return o.UpdateCassandraYaml, true
+}
+
+// HasUpdateCassandraYaml returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasUpdateCassandraYaml() bool {
+	if o != nil && o.UpdateCassandraYaml != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetUpdateCassandraYaml gets a reference to the given bool and assigns it to the UpdateCassandraYaml field.
+func (o *RestoreOperationResponse) SetUpdateCassandraYaml(v bool) {
+	o.UpdateCassandraYaml = &v
+}
+
+// GetRestorationStrategyType returns the RestorationStrategyType field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetRestorationStrategyType() string {
+	if o == nil || o.RestorationStrategyType == nil {
+		var ret string
+		return ret
+	}
+	return *o.RestorationStrategyType
+}
+
+// GetRestorationStrategyTypeOk returns a tuple with the RestorationStrategyType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetRestorationStrategyTypeOk() (*string, bool) {
+	if o == nil || o.RestorationStrategyType == nil {
+		return nil, false
+	}
+	return o.RestorationStrategyType, true
+}
+
+// HasRestorationStrategyType returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasRestorationStrategyType() bool {
+	if o != nil && o.RestorationStrategyType != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRestorationStrategyType gets a reference to the given string and assigns it to the RestorationStrategyType field.
+func (o *RestoreOperationResponse) SetRestorationStrategyType(v string) {
+	o.RestorationStrategyType = &v
+}
+
+// GetRestorationPhase returns the RestorationPhase field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetRestorationPhase() string {
+	if o == nil || o.RestorationPhase == nil {
+		var ret string
+		return ret
+	}
+	return *o.RestorationPhase
+}
+
+// GetRestorationPhaseOk returns a tuple with the RestorationPhase field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetRestorationPhaseOk() (*string, bool) {
+	if o == nil || o.RestorationPhase == nil {
+		return nil, false
+	}
+	return o.RestorationPhase, true
+}
+
+// HasRestorationPhase returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasRestorationPhase() bool {
+	if o != nil && o.RestorationPhase != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRestorationPhase gets a reference to the given string and assigns it to the RestorationPhase field.
+func (o *RestoreOperationResponse) SetRestorationPhase(v string) {
+	o.RestorationPhase = &v
+}
+
+// GetNoDeleteTruncates returns the NoDeleteTruncates field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetNoDeleteTruncates() bool {
+	if o == nil || o.NoDeleteTruncates == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoDeleteTruncates
+}
+
+// GetNoDeleteTruncatesOk returns a tuple with the NoDeleteTruncates field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetNoDeleteTruncatesOk() (*bool, bool) {
+	if o == nil || o.NoDeleteTruncates == nil {
+		return nil, false
+	}
+	return o.NoDeleteTruncates, true
+}
+
+// HasNoDeleteTruncates returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasNoDeleteTruncates() bool {
+	if o != nil && o.NoDeleteTruncates != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoDeleteTruncates gets a reference to the given bool and assigns it to the NoDeleteTruncates field.
+func (o *RestoreOperationResponse) SetNoDeleteTruncates(v bool) {
+	o.NoDeleteTruncates = &v
+}
+
+// GetNoDeleteDownloads returns the NoDeleteDownloads field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetNoDeleteDownloads() bool {
+	if o == nil || o.NoDeleteDownloads == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoDeleteDownloads
+}
+
+// GetNoDeleteDownloadsOk returns a tuple with the NoDeleteDownloads field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetNoDeleteDownloadsOk() (*bool, bool) {
+	if o == nil || o.NoDeleteDownloads == nil {
+		return nil, false
+	}
+	return o.NoDeleteDownloads, true
+}
+
+// HasNoDeleteDownloads returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasNoDeleteDownloads() bool {
+	if o != nil && o.NoDeleteDownloads != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoDeleteDownloads gets a reference to the given bool and assigns it to the NoDeleteDownloads field.
+func (o *RestoreOperationResponse) SetNoDeleteDownloads(v bool) {
+	o.NoDeleteDownloads = &v
+}
+
+// GetNoDownloadData returns the NoDownloadData field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetNoDownloadData() bool {
+	if o == nil || o.NoDownloadData == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoDownloadData
+}
+
+// GetNoDownloadDataOk returns a tuple with the NoDownloadData field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetNoDownloadDataOk() (*bool, bool) {
+	if o == nil || o.NoDownloadData == nil {
+		return nil, false
+	}
+	return o.NoDownloadData, true
+}
+
+// HasNoDownloadData returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasNoDownloadData() bool {
+	if o != nil && o.NoDownloadData != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoDownloadData gets a reference to the given bool and assigns it to the NoDownloadData field.
+func (o *RestoreOperationResponse) SetNoDownloadData(v bool) {
+	o.NoDownloadData = &v
+}
+
+// GetSchemaVersion returns the SchemaVersion field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetSchemaVersion() string {
+	if o == nil || o.SchemaVersion == nil {
+		var ret string
+		return ret
+	}
+	return *o.SchemaVersion
+}
+
+// GetSchemaVersionOk returns a tuple with the SchemaVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetSchemaVersionOk() (*string, bool) {
+	if o == nil || o.SchemaVersion == nil {
+		return nil, false
+	}
+	return o.SchemaVersion, true
+}
+
+// HasSchemaVersion returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasSchemaVersion() bool {
+	if o != nil && o.SchemaVersion != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSchemaVersion gets a reference to the given string and assigns it to the SchemaVersion field.
+func (o *RestoreOperationResponse) SetSchemaVersion(v string) {
+	o.SchemaVersion = &v
+}
+
+// GetExactSchemaVersion returns the ExactSchemaVersion field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetExactSchemaVersion() bool {
+	if o == nil || o.ExactSchemaVersion == nil {
+		var ret bool
+		return ret
+	}
+	return *o.ExactSchemaVersion
+}
+
+// GetExactSchemaVersionOk returns a tuple with the ExactSchemaVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetExactSchemaVersionOk() (*bool, bool) {
+	if o == nil || o.ExactSchemaVersion == nil {
+		return nil, false
+	}
+	return o.ExactSchemaVersion, true
+}
+
+// HasExactSchemaVersion returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasExactSchemaVersion() bool {
+	if o != nil && o.ExactSchemaVersion != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExactSchemaVersion gets a reference to the given bool and assigns it to the ExactSchemaVersion field.
+func (o *RestoreOperationResponse) SetExactSchemaVersion(v bool) {
+	o.ExactSchemaVersion = &v
+}
+
+// GetImport returns the Import field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetImport() ImportOperationRequest {
+	if o == nil || o.Import == nil {
+		var ret ImportOperationRequest
+		return ret
+	}
+	return *o.Import
+}
+
+// GetImportOk returns a tuple with the Import field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetImportOk() (*ImportOperationRequest, bool) {
+	if o == nil || o.Import == nil {
+		return nil, false
+	}
+	return o.Import, true
+}
+
+// HasImport returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasImport() bool {
+	if o != nil && o.Import != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetImport gets a reference to the given ImportOperationRequest and assigns it to the Import field.
+func (o *RestoreOperationResponse) SetImport(v ImportOperationRequest) {
+	o.Import = &v
+}
+
+// GetGlobalRequest returns the GlobalRequest field value if set, zero value otherwise.
+func (o *RestoreOperationResponse) GetGlobalRequest() bool {
+	if o == nil || o.GlobalRequest == nil {
+		var ret bool
+		return ret
+	}
+	return *o.GlobalRequest
+}
+
+// GetGlobalRequestOk returns a tuple with the GlobalRequest field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RestoreOperationResponse) GetGlobalRequestOk() (*bool, bool) {
+	if o == nil || o.GlobalRequest == nil {
+		return nil, false
+	}
+	return o.GlobalRequest, true
+}
+
+// HasGlobalRequest returns a boolean if a field has been set.
+func (o *RestoreOperationResponse) HasGlobalRequest() bool {
+	if o != nil && o.GlobalRequest != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetGlobalRequest gets a reference to the given bool and assigns it to the GlobalRequest field.
+func (o *RestoreOperationResponse) SetGlobalRequest(v bool) {
+	o.GlobalRequest = &v
+}
+
+func (o RestoreOperationResponse) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["state"] = o.State
+	}
+	if true {
+		toSerialize["progress"] = o.Progress
+	}
+	if true {
+		toSerialize["creationTime"] = o.CreationTime
+	}
+	if o.StartTime != nil {
+		toSerialize["startTime"] = o.StartTime
+	}
+	if o.CompletionTime != nil {
+		toSerialize["completionTime"] = o.CompletionTime
+	}
+	if o.FailureCause != nil {
+		toSerialize["failureCause"] = o.FailureCause
+	}
+	if true {
+		toSerialize["storageLocation"] = o.StorageLocation
+	}
+	if o.ConcurrentConnections != nil {
+		toSerialize["concurrentConnections"] = o.ConcurrentConnections
+	}
+	if o.LockFile != nil {
+		toSerialize["lockFile"] = o.LockFile
+	}
+	if o.CassandraDirectory != nil {
+		toSerialize["cassandraDirectory"] = o.CassandraDirectory
+	}
+	if o.CassandraConfigDirectory != nil {
+		toSerialize["cassandraConfigDirectory"] = o.CassandraConfigDirectory
+	}
+	if o.RestoreSystemKeyspace != nil {
+		toSerialize["restoreSystemKeyspace"] = o.RestoreSystemKeyspace
+	}
+	if true {
+		toSerialize["snapshotTag"] = o.SnapshotTag
+	}
+	if o.Entities != nil {
+		toSerialize["entities"] = o.Entities
+	}
+	if o.UpdateCassandraYaml != nil {
+		toSerialize["updateCassandraYaml"] = o.UpdateCassandraYaml
+	}
+	if o.RestorationStrategyType != nil {
+		toSerialize["restorationStrategyType"] = o.RestorationStrategyType
+	}
+	if o.RestorationPhase != nil {
+		toSerialize["restorationPhase"] = o.RestorationPhase
+	}
+	if o.NoDeleteTruncates != nil {
+		toSerialize["noDeleteTruncates"] = o.NoDeleteTruncates
+	}
+	if o.NoDeleteDownloads != nil {
+		toSerialize["noDeleteDownloads"] = o.NoDeleteDownloads
+	}
+	if o.NoDownloadData != nil {
+		toSerialize["noDownloadData"] = o.NoDownloadData
+	}
+	if o.SchemaVersion != nil {
+		toSerialize["schemaVersion"] = o.SchemaVersion
+	}
+	if o.ExactSchemaVersion != nil {
+		toSerialize["exactSchemaVersion"] = o.ExactSchemaVersion
+	}
+	if o.Import != nil {
+		toSerialize["import"] = o.Import
+	}
+	if o.GlobalRequest != nil {
+		toSerialize["globalRequest"] = o.GlobalRequest
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableRestoreOperationResponse struct {
+	value *RestoreOperationResponse
+	isSet bool
+}
+
+func (v NullableRestoreOperationResponse) Get() *RestoreOperationResponse {
+	return v.value
+}
+
+func (v *NullableRestoreOperationResponse) Set(val *RestoreOperationResponse) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableRestoreOperationResponse) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableRestoreOperationResponse) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableRestoreOperationResponse(val *RestoreOperationResponse) *NullableRestoreOperationResponse {
+	return &NullableRestoreOperationResponse{value: val, isSet: true}
+}
+
+func (v NullableRestoreOperationResponse) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableRestoreOperationResponse) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

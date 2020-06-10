@@ -10,13 +10,18 @@ Method | HTTP request | Description
 
 ## ConfigGet
 
-> ConfigGet(ctx, )
+> ConfigGet(ctx).Execute()
 
 returns configuration of a Cassandra node as in its cassandra.yaml file
 
-### Required Parameters
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiConfigGetRequest struct via the builder pattern
+
 
 ### Return type
 

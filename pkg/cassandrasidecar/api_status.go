@@ -25,12 +25,29 @@ var (
 // StatusApiService StatusApi service
 type StatusApiService service
 
+type apiStatusGetRequest struct {
+	ctx _context.Context
+	apiService *StatusApiService
+}
+
+
 /*
 StatusGet returns a state of a Cassandra node
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return CassandraStatus
+@return apiStatusGetRequest
 */
-func (a *StatusApiService) StatusGet(ctx _context.Context) (CassandraStatus, *_nethttp.Response, error) {
+func (a *StatusApiService) StatusGet(ctx _context.Context) apiStatusGetRequest {
+	return apiStatusGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+ @return CassandraStatus
+*/
+func (r apiStatusGetRequest) Execute() (CassandraStatus, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -40,8 +57,13 @@ func (a *StatusApiService) StatusGet(ctx _context.Context) (CassandraStatus, *_n
 		localVarReturnValue  CassandraStatus
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/status"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "StatusApiService.StatusGet")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/status"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -63,12 +85,12 @@ func (a *StatusApiService) StatusGet(ctx _context.Context) (CassandraStatus, *_n
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -86,7 +108,7 @@ func (a *StatusApiService) StatusGet(ctx _context.Context) (CassandraStatus, *_n
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
 			var v CassandraStatus
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -96,7 +118,7 @@ func (a *StatusApiService) StatusGet(ctx _context.Context) (CassandraStatus, *_n
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v CassandraStatusException
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -106,7 +128,7 @@ func (a *StatusApiService) StatusGet(ctx _context.Context) (CassandraStatus, *_n
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	err = r.apiService.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,

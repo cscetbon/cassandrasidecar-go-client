@@ -9,9 +9,12 @@
  */
 
 package cassandrasidecar
+
 import (
+	"encoding/json"
 	"time"
 )
+
 // ImportOperationResponse struct for ImportOperationResponse
 type ImportOperationResponse struct {
 	// has to be set to 'import' 
@@ -25,20 +28,666 @@ type ImportOperationResponse struct {
 	// timestamp telling when this operation was created on Sidecar's side 
 	CreationTime time.Time `json:"creationTime"`
 	// timestamp telling when this operation was started by Sidecar, if an operation is created, it does not necessarily mean that it will be started right away, in most cases it is the case but if e.g. ExecutorService is full on its working thread, an execution of an operation is postponed and start time is updated only after that 
-	StartTime time.Time `json:"startTime,omitempty"`
+	StartTime *time.Time `json:"startTime,omitempty"`
 	// timestamp telling when an operation has finished, irrelevant of its result, an operation can be failed and it would still have this field populated. 
-	CompletionTime time.Time `json:"completionTime,omitempty"`
+	CompletionTime *time.Time `json:"completionTime,omitempty"`
 	// This field contains serialized java.lang.Throwable in case this operation has failed 
-	FailureCause map[string]interface{} `json:"failureCause,omitempty"`
-	Keyspace string `json:"keyspace,omitempty"`
-	Table string `json:"table,omitempty"`
+	FailureCause *map[string]interface{} `json:"failureCause,omitempty"`
+	Keyspace *string `json:"keyspace,omitempty"`
+	Table *string `json:"table,omitempty"`
 	SourceDir string `json:"sourceDir"`
-	KeepLevel bool `json:"keepLevel,omitempty"`
-	KeepRepaired bool `json:"keepRepaired,omitempty"`
-	NoVerify bool `json:"noVerify,omitempty"`
-	NoVerifyTokens bool `json:"noVerifyTokens,omitempty"`
-	NoInvalidateCaches bool `json:"noInvalidateCaches,omitempty"`
+	KeepLevel *bool `json:"keepLevel,omitempty"`
+	KeepRepaired *bool `json:"keepRepaired,omitempty"`
+	NoVerify *bool `json:"noVerify,omitempty"`
+	NoVerifyTokens *bool `json:"noVerifyTokens,omitempty"`
+	NoInvalidateCaches *bool `json:"noInvalidateCaches,omitempty"`
 	// defaults to false, if true, noVerifyTokens, noInvalidateCaches and noVerify will be set to true automatically 
-	Quick bool `json:"quick,omitempty"`
-	ExtendedVerify bool `json:"extendedVerify,omitempty"`
+	Quick *bool `json:"quick,omitempty"`
+	ExtendedVerify *bool `json:"extendedVerify,omitempty"`
+}
+
+// NewImportOperationResponse instantiates a new ImportOperationResponse object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewImportOperationResponse(type_ string, id string, state string, progress float32, creationTime time.Time, sourceDir string, ) *ImportOperationResponse {
+	this := ImportOperationResponse{}
+	this.Type = type_
+	this.Id = id
+	this.State = state
+	this.Progress = progress
+	this.CreationTime = creationTime
+	this.SourceDir = sourceDir
+	return &this
+}
+
+// NewImportOperationResponseWithDefaults instantiates a new ImportOperationResponse object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewImportOperationResponseWithDefaults() *ImportOperationResponse {
+	this := ImportOperationResponse{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *ImportOperationResponse) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *ImportOperationResponse) SetType(v string) {
+	o.Type = v
+}
+
+// GetId returns the Id field value
+func (o *ImportOperationResponse) GetId() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *ImportOperationResponse) SetId(v string) {
+	o.Id = v
+}
+
+// GetState returns the State field value
+func (o *ImportOperationResponse) GetState() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.State
+}
+
+// GetStateOk returns a tuple with the State field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetStateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.State, true
+}
+
+// SetState sets field value
+func (o *ImportOperationResponse) SetState(v string) {
+	o.State = v
+}
+
+// GetProgress returns the Progress field value
+func (o *ImportOperationResponse) GetProgress() float32 {
+	if o == nil  {
+		var ret float32
+		return ret
+	}
+
+	return o.Progress
+}
+
+// GetProgressOk returns a tuple with the Progress field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetProgressOk() (*float32, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Progress, true
+}
+
+// SetProgress sets field value
+func (o *ImportOperationResponse) SetProgress(v float32) {
+	o.Progress = v
+}
+
+// GetCreationTime returns the CreationTime field value
+func (o *ImportOperationResponse) GetCreationTime() time.Time {
+	if o == nil  {
+		var ret time.Time
+		return ret
+	}
+
+	return o.CreationTime
+}
+
+// GetCreationTimeOk returns a tuple with the CreationTime field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetCreationTimeOk() (*time.Time, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CreationTime, true
+}
+
+// SetCreationTime sets field value
+func (o *ImportOperationResponse) SetCreationTime(v time.Time) {
+	o.CreationTime = v
+}
+
+// GetStartTime returns the StartTime field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetStartTime() time.Time {
+	if o == nil || o.StartTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.StartTime
+}
+
+// GetStartTimeOk returns a tuple with the StartTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetStartTimeOk() (*time.Time, bool) {
+	if o == nil || o.StartTime == nil {
+		return nil, false
+	}
+	return o.StartTime, true
+}
+
+// HasStartTime returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasStartTime() bool {
+	if o != nil && o.StartTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStartTime gets a reference to the given time.Time and assigns it to the StartTime field.
+func (o *ImportOperationResponse) SetStartTime(v time.Time) {
+	o.StartTime = &v
+}
+
+// GetCompletionTime returns the CompletionTime field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetCompletionTime() time.Time {
+	if o == nil || o.CompletionTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CompletionTime
+}
+
+// GetCompletionTimeOk returns a tuple with the CompletionTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetCompletionTimeOk() (*time.Time, bool) {
+	if o == nil || o.CompletionTime == nil {
+		return nil, false
+	}
+	return o.CompletionTime, true
+}
+
+// HasCompletionTime returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasCompletionTime() bool {
+	if o != nil && o.CompletionTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCompletionTime gets a reference to the given time.Time and assigns it to the CompletionTime field.
+func (o *ImportOperationResponse) SetCompletionTime(v time.Time) {
+	o.CompletionTime = &v
+}
+
+// GetFailureCause returns the FailureCause field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetFailureCause() map[string]interface{} {
+	if o == nil || o.FailureCause == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return *o.FailureCause
+}
+
+// GetFailureCauseOk returns a tuple with the FailureCause field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetFailureCauseOk() (*map[string]interface{}, bool) {
+	if o == nil || o.FailureCause == nil {
+		return nil, false
+	}
+	return o.FailureCause, true
+}
+
+// HasFailureCause returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasFailureCause() bool {
+	if o != nil && o.FailureCause != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureCause gets a reference to the given map[string]interface{} and assigns it to the FailureCause field.
+func (o *ImportOperationResponse) SetFailureCause(v map[string]interface{}) {
+	o.FailureCause = &v
+}
+
+// GetKeyspace returns the Keyspace field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetKeyspace() string {
+	if o == nil || o.Keyspace == nil {
+		var ret string
+		return ret
+	}
+	return *o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetKeyspaceOk() (*string, bool) {
+	if o == nil || o.Keyspace == nil {
+		return nil, false
+	}
+	return o.Keyspace, true
+}
+
+// HasKeyspace returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasKeyspace() bool {
+	if o != nil && o.Keyspace != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKeyspace gets a reference to the given string and assigns it to the Keyspace field.
+func (o *ImportOperationResponse) SetKeyspace(v string) {
+	o.Keyspace = &v
+}
+
+// GetTable returns the Table field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetTable() string {
+	if o == nil || o.Table == nil {
+		var ret string
+		return ret
+	}
+	return *o.Table
+}
+
+// GetTableOk returns a tuple with the Table field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetTableOk() (*string, bool) {
+	if o == nil || o.Table == nil {
+		return nil, false
+	}
+	return o.Table, true
+}
+
+// HasTable returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasTable() bool {
+	if o != nil && o.Table != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTable gets a reference to the given string and assigns it to the Table field.
+func (o *ImportOperationResponse) SetTable(v string) {
+	o.Table = &v
+}
+
+// GetSourceDir returns the SourceDir field value
+func (o *ImportOperationResponse) GetSourceDir() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.SourceDir
+}
+
+// GetSourceDirOk returns a tuple with the SourceDir field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetSourceDirOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.SourceDir, true
+}
+
+// SetSourceDir sets field value
+func (o *ImportOperationResponse) SetSourceDir(v string) {
+	o.SourceDir = v
+}
+
+// GetKeepLevel returns the KeepLevel field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetKeepLevel() bool {
+	if o == nil || o.KeepLevel == nil {
+		var ret bool
+		return ret
+	}
+	return *o.KeepLevel
+}
+
+// GetKeepLevelOk returns a tuple with the KeepLevel field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetKeepLevelOk() (*bool, bool) {
+	if o == nil || o.KeepLevel == nil {
+		return nil, false
+	}
+	return o.KeepLevel, true
+}
+
+// HasKeepLevel returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasKeepLevel() bool {
+	if o != nil && o.KeepLevel != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKeepLevel gets a reference to the given bool and assigns it to the KeepLevel field.
+func (o *ImportOperationResponse) SetKeepLevel(v bool) {
+	o.KeepLevel = &v
+}
+
+// GetKeepRepaired returns the KeepRepaired field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetKeepRepaired() bool {
+	if o == nil || o.KeepRepaired == nil {
+		var ret bool
+		return ret
+	}
+	return *o.KeepRepaired
+}
+
+// GetKeepRepairedOk returns a tuple with the KeepRepaired field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetKeepRepairedOk() (*bool, bool) {
+	if o == nil || o.KeepRepaired == nil {
+		return nil, false
+	}
+	return o.KeepRepaired, true
+}
+
+// HasKeepRepaired returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasKeepRepaired() bool {
+	if o != nil && o.KeepRepaired != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKeepRepaired gets a reference to the given bool and assigns it to the KeepRepaired field.
+func (o *ImportOperationResponse) SetKeepRepaired(v bool) {
+	o.KeepRepaired = &v
+}
+
+// GetNoVerify returns the NoVerify field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetNoVerify() bool {
+	if o == nil || o.NoVerify == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoVerify
+}
+
+// GetNoVerifyOk returns a tuple with the NoVerify field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetNoVerifyOk() (*bool, bool) {
+	if o == nil || o.NoVerify == nil {
+		return nil, false
+	}
+	return o.NoVerify, true
+}
+
+// HasNoVerify returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasNoVerify() bool {
+	if o != nil && o.NoVerify != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoVerify gets a reference to the given bool and assigns it to the NoVerify field.
+func (o *ImportOperationResponse) SetNoVerify(v bool) {
+	o.NoVerify = &v
+}
+
+// GetNoVerifyTokens returns the NoVerifyTokens field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetNoVerifyTokens() bool {
+	if o == nil || o.NoVerifyTokens == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoVerifyTokens
+}
+
+// GetNoVerifyTokensOk returns a tuple with the NoVerifyTokens field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetNoVerifyTokensOk() (*bool, bool) {
+	if o == nil || o.NoVerifyTokens == nil {
+		return nil, false
+	}
+	return o.NoVerifyTokens, true
+}
+
+// HasNoVerifyTokens returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasNoVerifyTokens() bool {
+	if o != nil && o.NoVerifyTokens != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoVerifyTokens gets a reference to the given bool and assigns it to the NoVerifyTokens field.
+func (o *ImportOperationResponse) SetNoVerifyTokens(v bool) {
+	o.NoVerifyTokens = &v
+}
+
+// GetNoInvalidateCaches returns the NoInvalidateCaches field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetNoInvalidateCaches() bool {
+	if o == nil || o.NoInvalidateCaches == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoInvalidateCaches
+}
+
+// GetNoInvalidateCachesOk returns a tuple with the NoInvalidateCaches field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetNoInvalidateCachesOk() (*bool, bool) {
+	if o == nil || o.NoInvalidateCaches == nil {
+		return nil, false
+	}
+	return o.NoInvalidateCaches, true
+}
+
+// HasNoInvalidateCaches returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasNoInvalidateCaches() bool {
+	if o != nil && o.NoInvalidateCaches != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoInvalidateCaches gets a reference to the given bool and assigns it to the NoInvalidateCaches field.
+func (o *ImportOperationResponse) SetNoInvalidateCaches(v bool) {
+	o.NoInvalidateCaches = &v
+}
+
+// GetQuick returns the Quick field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetQuick() bool {
+	if o == nil || o.Quick == nil {
+		var ret bool
+		return ret
+	}
+	return *o.Quick
+}
+
+// GetQuickOk returns a tuple with the Quick field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetQuickOk() (*bool, bool) {
+	if o == nil || o.Quick == nil {
+		return nil, false
+	}
+	return o.Quick, true
+}
+
+// HasQuick returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasQuick() bool {
+	if o != nil && o.Quick != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetQuick gets a reference to the given bool and assigns it to the Quick field.
+func (o *ImportOperationResponse) SetQuick(v bool) {
+	o.Quick = &v
+}
+
+// GetExtendedVerify returns the ExtendedVerify field value if set, zero value otherwise.
+func (o *ImportOperationResponse) GetExtendedVerify() bool {
+	if o == nil || o.ExtendedVerify == nil {
+		var ret bool
+		return ret
+	}
+	return *o.ExtendedVerify
+}
+
+// GetExtendedVerifyOk returns a tuple with the ExtendedVerify field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationResponse) GetExtendedVerifyOk() (*bool, bool) {
+	if o == nil || o.ExtendedVerify == nil {
+		return nil, false
+	}
+	return o.ExtendedVerify, true
+}
+
+// HasExtendedVerify returns a boolean if a field has been set.
+func (o *ImportOperationResponse) HasExtendedVerify() bool {
+	if o != nil && o.ExtendedVerify != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExtendedVerify gets a reference to the given bool and assigns it to the ExtendedVerify field.
+func (o *ImportOperationResponse) SetExtendedVerify(v bool) {
+	o.ExtendedVerify = &v
+}
+
+func (o ImportOperationResponse) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["state"] = o.State
+	}
+	if true {
+		toSerialize["progress"] = o.Progress
+	}
+	if true {
+		toSerialize["creationTime"] = o.CreationTime
+	}
+	if o.StartTime != nil {
+		toSerialize["startTime"] = o.StartTime
+	}
+	if o.CompletionTime != nil {
+		toSerialize["completionTime"] = o.CompletionTime
+	}
+	if o.FailureCause != nil {
+		toSerialize["failureCause"] = o.FailureCause
+	}
+	if o.Keyspace != nil {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Table != nil {
+		toSerialize["table"] = o.Table
+	}
+	if true {
+		toSerialize["sourceDir"] = o.SourceDir
+	}
+	if o.KeepLevel != nil {
+		toSerialize["keepLevel"] = o.KeepLevel
+	}
+	if o.KeepRepaired != nil {
+		toSerialize["keepRepaired"] = o.KeepRepaired
+	}
+	if o.NoVerify != nil {
+		toSerialize["noVerify"] = o.NoVerify
+	}
+	if o.NoVerifyTokens != nil {
+		toSerialize["noVerifyTokens"] = o.NoVerifyTokens
+	}
+	if o.NoInvalidateCaches != nil {
+		toSerialize["noInvalidateCaches"] = o.NoInvalidateCaches
+	}
+	if o.Quick != nil {
+		toSerialize["quick"] = o.Quick
+	}
+	if o.ExtendedVerify != nil {
+		toSerialize["extendedVerify"] = o.ExtendedVerify
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableImportOperationResponse struct {
+	value *ImportOperationResponse
+	isSet bool
+}
+
+func (v NullableImportOperationResponse) Get() *ImportOperationResponse {
+	return v.value
+}
+
+func (v *NullableImportOperationResponse) Set(val *ImportOperationResponse) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableImportOperationResponse) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableImportOperationResponse) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableImportOperationResponse(val *ImportOperationResponse) *NullableImportOperationResponse {
+	return &NullableImportOperationResponse{value: val, isSet: true}
+}
+
+func (v NullableImportOperationResponse) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableImportOperationResponse) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

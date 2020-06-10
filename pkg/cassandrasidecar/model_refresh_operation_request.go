@@ -9,6 +9,11 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // RefreshOperationRequest refreshes a table, this is done by calling StorageServiceMBean#loadNewSSTables 
 type RefreshOperationRequest struct {
 	Type string `json:"type"`
@@ -16,4 +21,146 @@ type RefreshOperationRequest struct {
 	Keyspace string `json:"keyspace"`
 	// table to refresh 
 	Table string `json:"table"`
+}
+
+// NewRefreshOperationRequest instantiates a new RefreshOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewRefreshOperationRequest(type_ string, keyspace string, table string, ) *RefreshOperationRequest {
+	this := RefreshOperationRequest{}
+	this.Type = type_
+	this.Keyspace = keyspace
+	this.Table = table
+	return &this
+}
+
+// NewRefreshOperationRequestWithDefaults instantiates a new RefreshOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewRefreshOperationRequestWithDefaults() *RefreshOperationRequest {
+	this := RefreshOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *RefreshOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *RefreshOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *RefreshOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *RefreshOperationRequest) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *RefreshOperationRequest) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *RefreshOperationRequest) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTable returns the Table field value
+func (o *RefreshOperationRequest) GetTable() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Table
+}
+
+// GetTableOk returns a tuple with the Table field value
+// and a boolean to check if the value has been set.
+func (o *RefreshOperationRequest) GetTableOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Table, true
+}
+
+// SetTable sets field value
+func (o *RefreshOperationRequest) SetTable(v string) {
+	o.Table = v
+}
+
+func (o RefreshOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if true {
+		toSerialize["table"] = o.Table
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableRefreshOperationRequest struct {
+	value *RefreshOperationRequest
+	isSet bool
+}
+
+func (v NullableRefreshOperationRequest) Get() *RefreshOperationRequest {
+	return v.value
+}
+
+func (v *NullableRefreshOperationRequest) Set(val *RefreshOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableRefreshOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableRefreshOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableRefreshOperationRequest(val *RefreshOperationRequest) *NullableRefreshOperationRequest {
+	return &NullableRefreshOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableRefreshOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableRefreshOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

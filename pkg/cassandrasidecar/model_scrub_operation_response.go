@@ -9,9 +9,12 @@
  */
 
 package cassandrasidecar
+
 import (
+	"encoding/json"
 	"time"
 )
+
 // ScrubOperationResponse struct for ScrubOperationResponse
 type ScrubOperationResponse struct {
 	Type string `json:"type"`
@@ -24,23 +27,564 @@ type ScrubOperationResponse struct {
 	// timestamp telling when this operation was created on Sidecar's side 
 	CreationTime time.Time `json:"creationTime"`
 	// timestamp telling when this operation was started by Sidecar, if an operation is created, it does not necessarily mean that it will be started right away, in most cases it is the case but if e.g. ExecutorService is full on its working thread, an execution of an operation is postponed and start time is updated only after that 
-	StartTime time.Time `json:"startTime,omitempty"`
+	StartTime *time.Time `json:"startTime,omitempty"`
 	// timestamp telling when an operation has finished, irrelevant of its result, an operation can be failed and it would still have this field populated. 
-	CompletionTime time.Time `json:"completionTime,omitempty"`
+	CompletionTime *time.Time `json:"completionTime,omitempty"`
 	// This field contains serialized java.lang.Throwable in case this operation has failed 
-	FailureCause map[string]interface{} `json:"failureCause,omitempty"`
+	FailureCause *map[string]interface{} `json:"failureCause,omitempty"`
 	// keyspace to scrub 
 	Keyspace string `json:"keyspace"`
 	// tables to scrub, empty or not provided will scrub all tables in respective keyspace 
-	Tables []string `json:"tables,omitempty"`
+	Tables *[]string `json:"tables,omitempty"`
 	// number of sstables to scrub simultanously, set to 0 to use all available compaction threads 
-	Jobs int32 `json:"jobs,omitempty"`
+	Jobs *int32 `json:"jobs,omitempty"`
 	// scrubbed CFs will be snapshotted first, defaults to false 
-	DisableSnapshot bool `json:"disableSnapshot,omitempty"`
+	DisableSnapshot *bool `json:"disableSnapshot,omitempty"`
 	// skip corrupted partitions even when scrubbing counter tables, defaults to false 
-	SkipCorrupted bool `json:"skipCorrupted,omitempty"`
+	SkipCorrupted *bool `json:"skipCorrupted,omitempty"`
 	// do not validate columns using column validator, defaults to false 
-	NoValidate bool `json:"noValidate,omitempty"`
+	NoValidate *bool `json:"noValidate,omitempty"`
 	// Rewrites rows with overflowed expiration date affected by CASSANDRA-14092 with the maximum supported expiration date of 2038-01-19T03:14:06+00:00. The rows are rewritten with the original timestamp incremented by one millisecond to override/supersede any potential tombstone that may have been generated during compaction of the affected rows. 
-	ReinsertOverflowedTTL bool `json:"reinsertOverflowedTTL,omitempty"`
+	ReinsertOverflowedTTL *bool `json:"reinsertOverflowedTTL,omitempty"`
+}
+
+// NewScrubOperationResponse instantiates a new ScrubOperationResponse object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewScrubOperationResponse(type_ string, id string, state string, progress float32, creationTime time.Time, keyspace string, ) *ScrubOperationResponse {
+	this := ScrubOperationResponse{}
+	this.Type = type_
+	this.Id = id
+	this.State = state
+	this.Progress = progress
+	this.CreationTime = creationTime
+	this.Keyspace = keyspace
+	return &this
+}
+
+// NewScrubOperationResponseWithDefaults instantiates a new ScrubOperationResponse object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewScrubOperationResponseWithDefaults() *ScrubOperationResponse {
+	this := ScrubOperationResponse{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *ScrubOperationResponse) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *ScrubOperationResponse) SetType(v string) {
+	o.Type = v
+}
+
+// GetId returns the Id field value
+func (o *ScrubOperationResponse) GetId() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *ScrubOperationResponse) SetId(v string) {
+	o.Id = v
+}
+
+// GetState returns the State field value
+func (o *ScrubOperationResponse) GetState() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.State
+}
+
+// GetStateOk returns a tuple with the State field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetStateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.State, true
+}
+
+// SetState sets field value
+func (o *ScrubOperationResponse) SetState(v string) {
+	o.State = v
+}
+
+// GetProgress returns the Progress field value
+func (o *ScrubOperationResponse) GetProgress() float32 {
+	if o == nil  {
+		var ret float32
+		return ret
+	}
+
+	return o.Progress
+}
+
+// GetProgressOk returns a tuple with the Progress field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetProgressOk() (*float32, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Progress, true
+}
+
+// SetProgress sets field value
+func (o *ScrubOperationResponse) SetProgress(v float32) {
+	o.Progress = v
+}
+
+// GetCreationTime returns the CreationTime field value
+func (o *ScrubOperationResponse) GetCreationTime() time.Time {
+	if o == nil  {
+		var ret time.Time
+		return ret
+	}
+
+	return o.CreationTime
+}
+
+// GetCreationTimeOk returns a tuple with the CreationTime field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetCreationTimeOk() (*time.Time, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CreationTime, true
+}
+
+// SetCreationTime sets field value
+func (o *ScrubOperationResponse) SetCreationTime(v time.Time) {
+	o.CreationTime = v
+}
+
+// GetStartTime returns the StartTime field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetStartTime() time.Time {
+	if o == nil || o.StartTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.StartTime
+}
+
+// GetStartTimeOk returns a tuple with the StartTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetStartTimeOk() (*time.Time, bool) {
+	if o == nil || o.StartTime == nil {
+		return nil, false
+	}
+	return o.StartTime, true
+}
+
+// HasStartTime returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasStartTime() bool {
+	if o != nil && o.StartTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStartTime gets a reference to the given time.Time and assigns it to the StartTime field.
+func (o *ScrubOperationResponse) SetStartTime(v time.Time) {
+	o.StartTime = &v
+}
+
+// GetCompletionTime returns the CompletionTime field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetCompletionTime() time.Time {
+	if o == nil || o.CompletionTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CompletionTime
+}
+
+// GetCompletionTimeOk returns a tuple with the CompletionTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetCompletionTimeOk() (*time.Time, bool) {
+	if o == nil || o.CompletionTime == nil {
+		return nil, false
+	}
+	return o.CompletionTime, true
+}
+
+// HasCompletionTime returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasCompletionTime() bool {
+	if o != nil && o.CompletionTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCompletionTime gets a reference to the given time.Time and assigns it to the CompletionTime field.
+func (o *ScrubOperationResponse) SetCompletionTime(v time.Time) {
+	o.CompletionTime = &v
+}
+
+// GetFailureCause returns the FailureCause field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetFailureCause() map[string]interface{} {
+	if o == nil || o.FailureCause == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return *o.FailureCause
+}
+
+// GetFailureCauseOk returns a tuple with the FailureCause field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetFailureCauseOk() (*map[string]interface{}, bool) {
+	if o == nil || o.FailureCause == nil {
+		return nil, false
+	}
+	return o.FailureCause, true
+}
+
+// HasFailureCause returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasFailureCause() bool {
+	if o != nil && o.FailureCause != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureCause gets a reference to the given map[string]interface{} and assigns it to the FailureCause field.
+func (o *ScrubOperationResponse) SetFailureCause(v map[string]interface{}) {
+	o.FailureCause = &v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *ScrubOperationResponse) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *ScrubOperationResponse) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTables returns the Tables field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetTables() []string {
+	if o == nil || o.Tables == nil {
+		var ret []string
+		return ret
+	}
+	return *o.Tables
+}
+
+// GetTablesOk returns a tuple with the Tables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetTablesOk() (*[]string, bool) {
+	if o == nil || o.Tables == nil {
+		return nil, false
+	}
+	return o.Tables, true
+}
+
+// HasTables returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasTables() bool {
+	if o != nil && o.Tables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTables gets a reference to the given []string and assigns it to the Tables field.
+func (o *ScrubOperationResponse) SetTables(v []string) {
+	o.Tables = &v
+}
+
+// GetJobs returns the Jobs field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetJobs() int32 {
+	if o == nil || o.Jobs == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Jobs
+}
+
+// GetJobsOk returns a tuple with the Jobs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetJobsOk() (*int32, bool) {
+	if o == nil || o.Jobs == nil {
+		return nil, false
+	}
+	return o.Jobs, true
+}
+
+// HasJobs returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasJobs() bool {
+	if o != nil && o.Jobs != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetJobs gets a reference to the given int32 and assigns it to the Jobs field.
+func (o *ScrubOperationResponse) SetJobs(v int32) {
+	o.Jobs = &v
+}
+
+// GetDisableSnapshot returns the DisableSnapshot field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetDisableSnapshot() bool {
+	if o == nil || o.DisableSnapshot == nil {
+		var ret bool
+		return ret
+	}
+	return *o.DisableSnapshot
+}
+
+// GetDisableSnapshotOk returns a tuple with the DisableSnapshot field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetDisableSnapshotOk() (*bool, bool) {
+	if o == nil || o.DisableSnapshot == nil {
+		return nil, false
+	}
+	return o.DisableSnapshot, true
+}
+
+// HasDisableSnapshot returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasDisableSnapshot() bool {
+	if o != nil && o.DisableSnapshot != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDisableSnapshot gets a reference to the given bool and assigns it to the DisableSnapshot field.
+func (o *ScrubOperationResponse) SetDisableSnapshot(v bool) {
+	o.DisableSnapshot = &v
+}
+
+// GetSkipCorrupted returns the SkipCorrupted field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetSkipCorrupted() bool {
+	if o == nil || o.SkipCorrupted == nil {
+		var ret bool
+		return ret
+	}
+	return *o.SkipCorrupted
+}
+
+// GetSkipCorruptedOk returns a tuple with the SkipCorrupted field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetSkipCorruptedOk() (*bool, bool) {
+	if o == nil || o.SkipCorrupted == nil {
+		return nil, false
+	}
+	return o.SkipCorrupted, true
+}
+
+// HasSkipCorrupted returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasSkipCorrupted() bool {
+	if o != nil && o.SkipCorrupted != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSkipCorrupted gets a reference to the given bool and assigns it to the SkipCorrupted field.
+func (o *ScrubOperationResponse) SetSkipCorrupted(v bool) {
+	o.SkipCorrupted = &v
+}
+
+// GetNoValidate returns the NoValidate field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetNoValidate() bool {
+	if o == nil || o.NoValidate == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoValidate
+}
+
+// GetNoValidateOk returns a tuple with the NoValidate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetNoValidateOk() (*bool, bool) {
+	if o == nil || o.NoValidate == nil {
+		return nil, false
+	}
+	return o.NoValidate, true
+}
+
+// HasNoValidate returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasNoValidate() bool {
+	if o != nil && o.NoValidate != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoValidate gets a reference to the given bool and assigns it to the NoValidate field.
+func (o *ScrubOperationResponse) SetNoValidate(v bool) {
+	o.NoValidate = &v
+}
+
+// GetReinsertOverflowedTTL returns the ReinsertOverflowedTTL field value if set, zero value otherwise.
+func (o *ScrubOperationResponse) GetReinsertOverflowedTTL() bool {
+	if o == nil || o.ReinsertOverflowedTTL == nil {
+		var ret bool
+		return ret
+	}
+	return *o.ReinsertOverflowedTTL
+}
+
+// GetReinsertOverflowedTTLOk returns a tuple with the ReinsertOverflowedTTL field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationResponse) GetReinsertOverflowedTTLOk() (*bool, bool) {
+	if o == nil || o.ReinsertOverflowedTTL == nil {
+		return nil, false
+	}
+	return o.ReinsertOverflowedTTL, true
+}
+
+// HasReinsertOverflowedTTL returns a boolean if a field has been set.
+func (o *ScrubOperationResponse) HasReinsertOverflowedTTL() bool {
+	if o != nil && o.ReinsertOverflowedTTL != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetReinsertOverflowedTTL gets a reference to the given bool and assigns it to the ReinsertOverflowedTTL field.
+func (o *ScrubOperationResponse) SetReinsertOverflowedTTL(v bool) {
+	o.ReinsertOverflowedTTL = &v
+}
+
+func (o ScrubOperationResponse) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["state"] = o.State
+	}
+	if true {
+		toSerialize["progress"] = o.Progress
+	}
+	if true {
+		toSerialize["creationTime"] = o.CreationTime
+	}
+	if o.StartTime != nil {
+		toSerialize["startTime"] = o.StartTime
+	}
+	if o.CompletionTime != nil {
+		toSerialize["completionTime"] = o.CompletionTime
+	}
+	if o.FailureCause != nil {
+		toSerialize["failureCause"] = o.FailureCause
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Tables != nil {
+		toSerialize["tables"] = o.Tables
+	}
+	if o.Jobs != nil {
+		toSerialize["jobs"] = o.Jobs
+	}
+	if o.DisableSnapshot != nil {
+		toSerialize["disableSnapshot"] = o.DisableSnapshot
+	}
+	if o.SkipCorrupted != nil {
+		toSerialize["skipCorrupted"] = o.SkipCorrupted
+	}
+	if o.NoValidate != nil {
+		toSerialize["noValidate"] = o.NoValidate
+	}
+	if o.ReinsertOverflowedTTL != nil {
+		toSerialize["reinsertOverflowedTTL"] = o.ReinsertOverflowedTTL
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableScrubOperationResponse struct {
+	value *ScrubOperationResponse
+	isSet bool
+}
+
+func (v NullableScrubOperationResponse) Get() *ScrubOperationResponse {
+	return v.value
+}
+
+func (v *NullableScrubOperationResponse) Set(val *ScrubOperationResponse) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableScrubOperationResponse) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableScrubOperationResponse) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableScrubOperationResponse(val *ScrubOperationResponse) *NullableScrubOperationResponse {
+	return &NullableScrubOperationResponse{value: val, isSet: true}
+}
+
+func (v NullableScrubOperationResponse) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableScrubOperationResponse) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

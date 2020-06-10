@@ -9,12 +9,250 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // CassandraVersion struct for CassandraVersion
 type CassandraVersion struct {
-	Major int32 `json:"major,omitempty"`
-	Minor int32 `json:"minor,omitempty"`
-	Patch int32 `json:"patch,omitempty"`
-	DsePatch int32 `json:"dsePatch,omitempty"`
+	Major *int32 `json:"major,omitempty"`
+	Minor *int32 `json:"minor,omitempty"`
+	Patch *int32 `json:"patch,omitempty"`
+	DsePatch *int32 `json:"dsePatch,omitempty"`
 	// Labels for Cassandra version, e.g. SNAPSHOT
-	PreReleaseLabels []string `json:"preReleaseLabels,omitempty"`
+	PreReleaseLabels *[]string `json:"preReleaseLabels,omitempty"`
+}
+
+// NewCassandraVersion instantiates a new CassandraVersion object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewCassandraVersion() *CassandraVersion {
+	this := CassandraVersion{}
+	return &this
+}
+
+// NewCassandraVersionWithDefaults instantiates a new CassandraVersion object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewCassandraVersionWithDefaults() *CassandraVersion {
+	this := CassandraVersion{}
+	return &this
+}
+
+// GetMajor returns the Major field value if set, zero value otherwise.
+func (o *CassandraVersion) GetMajor() int32 {
+	if o == nil || o.Major == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Major
+}
+
+// GetMajorOk returns a tuple with the Major field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CassandraVersion) GetMajorOk() (*int32, bool) {
+	if o == nil || o.Major == nil {
+		return nil, false
+	}
+	return o.Major, true
+}
+
+// HasMajor returns a boolean if a field has been set.
+func (o *CassandraVersion) HasMajor() bool {
+	if o != nil && o.Major != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetMajor gets a reference to the given int32 and assigns it to the Major field.
+func (o *CassandraVersion) SetMajor(v int32) {
+	o.Major = &v
+}
+
+// GetMinor returns the Minor field value if set, zero value otherwise.
+func (o *CassandraVersion) GetMinor() int32 {
+	if o == nil || o.Minor == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Minor
+}
+
+// GetMinorOk returns a tuple with the Minor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CassandraVersion) GetMinorOk() (*int32, bool) {
+	if o == nil || o.Minor == nil {
+		return nil, false
+	}
+	return o.Minor, true
+}
+
+// HasMinor returns a boolean if a field has been set.
+func (o *CassandraVersion) HasMinor() bool {
+	if o != nil && o.Minor != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetMinor gets a reference to the given int32 and assigns it to the Minor field.
+func (o *CassandraVersion) SetMinor(v int32) {
+	o.Minor = &v
+}
+
+// GetPatch returns the Patch field value if set, zero value otherwise.
+func (o *CassandraVersion) GetPatch() int32 {
+	if o == nil || o.Patch == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Patch
+}
+
+// GetPatchOk returns a tuple with the Patch field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CassandraVersion) GetPatchOk() (*int32, bool) {
+	if o == nil || o.Patch == nil {
+		return nil, false
+	}
+	return o.Patch, true
+}
+
+// HasPatch returns a boolean if a field has been set.
+func (o *CassandraVersion) HasPatch() bool {
+	if o != nil && o.Patch != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPatch gets a reference to the given int32 and assigns it to the Patch field.
+func (o *CassandraVersion) SetPatch(v int32) {
+	o.Patch = &v
+}
+
+// GetDsePatch returns the DsePatch field value if set, zero value otherwise.
+func (o *CassandraVersion) GetDsePatch() int32 {
+	if o == nil || o.DsePatch == nil {
+		var ret int32
+		return ret
+	}
+	return *o.DsePatch
+}
+
+// GetDsePatchOk returns a tuple with the DsePatch field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CassandraVersion) GetDsePatchOk() (*int32, bool) {
+	if o == nil || o.DsePatch == nil {
+		return nil, false
+	}
+	return o.DsePatch, true
+}
+
+// HasDsePatch returns a boolean if a field has been set.
+func (o *CassandraVersion) HasDsePatch() bool {
+	if o != nil && o.DsePatch != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDsePatch gets a reference to the given int32 and assigns it to the DsePatch field.
+func (o *CassandraVersion) SetDsePatch(v int32) {
+	o.DsePatch = &v
+}
+
+// GetPreReleaseLabels returns the PreReleaseLabels field value if set, zero value otherwise.
+func (o *CassandraVersion) GetPreReleaseLabels() []string {
+	if o == nil || o.PreReleaseLabels == nil {
+		var ret []string
+		return ret
+	}
+	return *o.PreReleaseLabels
+}
+
+// GetPreReleaseLabelsOk returns a tuple with the PreReleaseLabels field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CassandraVersion) GetPreReleaseLabelsOk() (*[]string, bool) {
+	if o == nil || o.PreReleaseLabels == nil {
+		return nil, false
+	}
+	return o.PreReleaseLabels, true
+}
+
+// HasPreReleaseLabels returns a boolean if a field has been set.
+func (o *CassandraVersion) HasPreReleaseLabels() bool {
+	if o != nil && o.PreReleaseLabels != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPreReleaseLabels gets a reference to the given []string and assigns it to the PreReleaseLabels field.
+func (o *CassandraVersion) SetPreReleaseLabels(v []string) {
+	o.PreReleaseLabels = &v
+}
+
+func (o CassandraVersion) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if o.Major != nil {
+		toSerialize["major"] = o.Major
+	}
+	if o.Minor != nil {
+		toSerialize["minor"] = o.Minor
+	}
+	if o.Patch != nil {
+		toSerialize["patch"] = o.Patch
+	}
+	if o.DsePatch != nil {
+		toSerialize["dsePatch"] = o.DsePatch
+	}
+	if o.PreReleaseLabels != nil {
+		toSerialize["preReleaseLabels"] = o.PreReleaseLabels
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableCassandraVersion struct {
+	value *CassandraVersion
+	isSet bool
+}
+
+func (v NullableCassandraVersion) Get() *CassandraVersion {
+	return v.value
+}
+
+func (v *NullableCassandraVersion) Set(val *CassandraVersion) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableCassandraVersion) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableCassandraVersion) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableCassandraVersion(val *CassandraVersion) *NullableCassandraVersion {
+	return &NullableCassandraVersion{value: val, isSet: true}
+}
+
+func (v NullableCassandraVersion) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableCassandraVersion) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

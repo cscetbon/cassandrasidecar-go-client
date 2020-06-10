@@ -17,7 +17,6 @@ import (
 	_neturl "net/url"
 	"strings"
 	"reflect"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -28,36 +27,63 @@ var (
 // OperationsApiService OperationsApi service
 type OperationsApiService service
 
-// OperationsGetOpts Optional parameters for the method 'OperationsGet'
-type OperationsGetOpts struct {
-    Type_ optional.Interface
-    Status optional.Interface
+type apiOperationsGetRequest struct {
+	ctx _context.Context
+	apiService *OperationsApiService
+	type_ *[]string
+	status *[]string
+}
+
+
+func (r apiOperationsGetRequest) Type_(type_ []string) apiOperationsGetRequest {
+	r.type_ = &type_
+	return r
+}
+
+func (r apiOperationsGetRequest) Status(status []string) apiOperationsGetRequest {
+	r.status = &status
+	return r
 }
 
 /*
 OperationsGet All operations of Sidecar
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *OperationsGetOpts - Optional Parameters:
- * @param "Type_" (optional.Interface of []string) -  type of operations to filter on
- * @param "Status" (optional.Interface of []string) -  status of operations to filter on
+@return apiOperationsGetRequest
 */
-func (a *OperationsApiService) OperationsGet(ctx _context.Context, localVarOptionals *OperationsGetOpts) (*_nethttp.Response, error) {
+func (a *OperationsApiService) OperationsGet(ctx _context.Context) apiOperationsGetRequest {
+	return apiOperationsGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+
+*/
+func (r apiOperationsGetRequest) Execute() (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
+		
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/operations"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "OperationsApiService.OperationsGet")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/operations"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-
-	if localVarOptionals != nil && localVarOptionals.Type_.IsSet() {
-		t:=localVarOptionals.Type_.Value()
+		
+	if r.type_ != nil {
+		t := *r.type_
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
@@ -67,8 +93,8 @@ func (a *OperationsApiService) OperationsGet(ctx _context.Context, localVarOptio
 			localVarQueryParams.Add("type", parameterToString(t, "multi"))
 		}
 	}
-	if localVarOptionals != nil && localVarOptionals.Status.IsSet() {
-		t:=localVarOptionals.Status.Value()
+	if r.status != nil {
+		t := *r.status
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
@@ -95,12 +121,12 @@ func (a *OperationsApiService) OperationsGet(ctx _context.Context, localVarOptio
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarHTTPResponse, err
 	}
@@ -121,28 +147,53 @@ func (a *OperationsApiService) OperationsGet(ctx _context.Context, localVarOptio
 
 	return localVarHTTPResponse, nil
 }
+type apiOperationsOperationIdGetRequest struct {
+	ctx _context.Context
+	apiService *OperationsApiService
+	operationId string
+}
+
 
 /*
 OperationsOperationIdGet abc
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param operationId ID of operation to return
+@return apiOperationsOperationIdGetRequest
 */
-func (a *OperationsApiService) OperationsOperationIdGet(ctx _context.Context, operationId string) (*_nethttp.Response, error) {
+func (a *OperationsApiService) OperationsOperationIdGet(ctx _context.Context, operationId string) apiOperationsOperationIdGetRequest {
+	return apiOperationsOperationIdGetRequest{
+		apiService: a,
+		ctx: ctx,
+		operationId: operationId,
+	}
+}
+
+/*
+Execute executes the request
+
+*/
+func (r apiOperationsOperationIdGetRequest) Execute() (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
+		
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/operations/{operationId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"operationId"+"}", _neturl.QueryEscape(parameterToString(operationId, "")) , -1)
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "OperationsApiService.OperationsOperationIdGet")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/operations/{operationId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"operationId"+"}", _neturl.QueryEscape(parameterToString(r.operationId, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
+	
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -161,12 +212,12 @@ func (a *OperationsApiService) OperationsOperationIdGet(ctx _context.Context, op
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarHTTPResponse, err
 	}
@@ -187,35 +238,55 @@ func (a *OperationsApiService) OperationsOperationIdGet(ctx _context.Context, op
 
 	return localVarHTTPResponse, nil
 }
+type apiOperationsPostRequest struct {
+	ctx _context.Context
+	apiService *OperationsApiService
+	uNKNOWNBASETYPE *UNKNOWN_BASE_TYPE
+}
 
-// OperationsPostOpts Optional parameters for the method 'OperationsPost'
-type OperationsPostOpts struct {
-    UNKNOWNBASETYPE optional.Interface
+
+func (r apiOperationsPostRequest) UNKNOWNBASETYPE(uNKNOWNBASETYPE UNKNOWN_BASE_TYPE) apiOperationsPostRequest {
+	r.uNKNOWNBASETYPE = &uNKNOWNBASETYPE
+	return r
 }
 
 /*
 OperationsPost Submits an operation to this Sidecar
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *OperationsPostOpts - Optional Parameters:
- * @param "UNKNOWNBASETYPE" (optional.Interface of UNKNOWN_BASE_TYPE) - 
-@return OneOfCleanupOperationResponseDecommissionOperationResponseDrainOperationResponseFlushOperationResponseRebuildOperationResponseRefreshOperationResponseRestartOperationResponseScrubOperationResponseUpgradeSsTablesOperationResponseImportOperationResponseTruncateOperationResponseBackupOperationResponseRestoreOperationResponse
+@return apiOperationsPostRequest
 */
-func (a *OperationsApiService) OperationsPost(ctx _context.Context, localVarOptionals *OperationsPostOpts) (OneOfCleanupOperationResponseDecommissionOperationResponseDrainOperationResponseFlushOperationResponseRebuildOperationResponseRefreshOperationResponseRestartOperationResponseScrubOperationResponseUpgradeSsTablesOperationResponseImportOperationResponseTruncateOperationResponseBackupOperationResponseRestoreOperationResponse, *_nethttp.Response, error) {
+func (a *OperationsApiService) OperationsPost(ctx _context.Context) apiOperationsPostRequest {
+	return apiOperationsPostRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+ @return OperationsPOST200
+*/
+func (r apiOperationsPostRequest) Execute() (OperationsPOST200, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  OneOfCleanupOperationResponseDecommissionOperationResponseDrainOperationResponseFlushOperationResponseRebuildOperationResponseRefreshOperationResponseRestartOperationResponseScrubOperationResponseUpgradeSsTablesOperationResponseImportOperationResponseTruncateOperationResponseBackupOperationResponseRestoreOperationResponse
+		localVarReturnValue  OperationsPOST200
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/operations"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "OperationsApiService.OperationsPost")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/operations"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-
+	
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 
@@ -234,20 +305,13 @@ func (a *OperationsApiService) OperationsPost(ctx _context.Context, localVarOpti
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.UNKNOWNBASETYPE.IsSet() {
-		localVarOptionalUNKNOWNBASETYPE, localVarOptionalUNKNOWNBASETYPEok := localVarOptionals.UNKNOWNBASETYPE.Value().(UNKNOWN_BASE_TYPE)
-		if !localVarOptionalUNKNOWNBASETYPEok {
-			return localVarReturnValue, nil, reportError("uNKNOWNBASETYPE should be UNKNOWN_BASE_TYPE")
-		}
-		localVarPostBody = &localVarOptionalUNKNOWNBASETYPE
-	}
-
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	localVarPostBody = r.uNKNOWNBASETYPE
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -264,8 +328,8 @@ func (a *OperationsApiService) OperationsPost(ctx _context.Context, localVarOpti
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v OneOfCleanupOperationResponseDecommissionOperationResponseDrainOperationResponseFlushOperationResponseRebuildOperationResponseRefreshOperationResponseRestartOperationResponseScrubOperationResponseUpgradeSsTablesOperationResponseImportOperationResponseTruncateOperationResponseBackupOperationResponseRestoreOperationResponse
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			var v OperationsPOST200
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -275,7 +339,7 @@ func (a *OperationsApiService) OperationsPost(ctx _context.Context, localVarOpti
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	err = r.apiService.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,

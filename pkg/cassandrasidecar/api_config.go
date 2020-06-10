@@ -25,21 +25,45 @@ var (
 // ConfigApiService ConfigApi service
 type ConfigApiService service
 
+type apiConfigGetRequest struct {
+	ctx _context.Context
+	apiService *ConfigApiService
+}
+
+
 /*
 ConfigGet returns configuration of a Cassandra node as in its cassandra.yaml file
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+@return apiConfigGetRequest
 */
-func (a *ConfigApiService) ConfigGet(ctx _context.Context) (*_nethttp.Response, error) {
+func (a *ConfigApiService) ConfigGet(ctx _context.Context) apiConfigGetRequest {
+	return apiConfigGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+
+*/
+func (r apiConfigGetRequest) Execute() (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
+		
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/config"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "ConfigApiService.ConfigGet")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/config"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -61,12 +85,12 @@ func (a *ConfigApiService) ConfigGet(ctx _context.Context) (*_nethttp.Response, 
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarHTTPResponse, err
 	}

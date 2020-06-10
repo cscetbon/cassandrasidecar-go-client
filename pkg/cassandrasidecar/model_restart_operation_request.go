@@ -9,7 +9,98 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // RestartOperationRequest restarts a Cassandra node this Sidecar talks to. This operation will be successfully carried out only in case both Cassandra node as well as this Sidecar are running in Kubernetes. There is an assumption that Cassandra node and Sidecar are running in separate Docker containers as part of the same Kubernetes Pod. The restart is done by executing \"/bin/kill 1\" of Cassandra container where pid 1 stands for Cassandra process. The logic behind restart is that Kubernetes detects that container has finished and it will start it again on its own. Before Cassandra node is stopped, it is drained first so there are not any requests comming to this node whatsover hence restart is safe. 
 type RestartOperationRequest struct {
 	Type string `json:"type"`
+}
+
+// NewRestartOperationRequest instantiates a new RestartOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewRestartOperationRequest(type_ string, ) *RestartOperationRequest {
+	this := RestartOperationRequest{}
+	this.Type = type_
+	return &this
+}
+
+// NewRestartOperationRequestWithDefaults instantiates a new RestartOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewRestartOperationRequestWithDefaults() *RestartOperationRequest {
+	this := RestartOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *RestartOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *RestartOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *RestartOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+func (o RestartOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableRestartOperationRequest struct {
+	value *RestartOperationRequest
+	isSet bool
+}
+
+func (v NullableRestartOperationRequest) Get() *RestartOperationRequest {
+	return v.value
+}
+
+func (v *NullableRestartOperationRequest) Set(val *RestartOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableRestartOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableRestartOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableRestartOperationRequest(val *RestartOperationRequest) *NullableRestartOperationRequest {
+	return &NullableRestartOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableRestartOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableRestartOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

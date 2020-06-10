@@ -9,15 +9,181 @@
  */
 
 package cassandrasidecar
+
 import (
+	"encoding/json"
 	"time"
 )
+
 // SidecarVersion struct for SidecarVersion
 type SidecarVersion struct {
 	// textual representation of Sidecar version
-	Version string `json:"version,omitempty"`
+	Version *string `json:"version,omitempty"`
 	// timestamp this Sidecar was built
-	BuildTime time.Time `json:"buildTime,omitempty"`
+	BuildTime *time.Time `json:"buildTime,omitempty"`
 	// git commit hash this Sidecar was built from
-	GitCommit string `json:"gitCommit,omitempty"`
+	GitCommit *string `json:"gitCommit,omitempty"`
+}
+
+// NewSidecarVersion instantiates a new SidecarVersion object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewSidecarVersion() *SidecarVersion {
+	this := SidecarVersion{}
+	return &this
+}
+
+// NewSidecarVersionWithDefaults instantiates a new SidecarVersion object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewSidecarVersionWithDefaults() *SidecarVersion {
+	this := SidecarVersion{}
+	return &this
+}
+
+// GetVersion returns the Version field value if set, zero value otherwise.
+func (o *SidecarVersion) GetVersion() string {
+	if o == nil || o.Version == nil {
+		var ret string
+		return ret
+	}
+	return *o.Version
+}
+
+// GetVersionOk returns a tuple with the Version field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SidecarVersion) GetVersionOk() (*string, bool) {
+	if o == nil || o.Version == nil {
+		return nil, false
+	}
+	return o.Version, true
+}
+
+// HasVersion returns a boolean if a field has been set.
+func (o *SidecarVersion) HasVersion() bool {
+	if o != nil && o.Version != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetVersion gets a reference to the given string and assigns it to the Version field.
+func (o *SidecarVersion) SetVersion(v string) {
+	o.Version = &v
+}
+
+// GetBuildTime returns the BuildTime field value if set, zero value otherwise.
+func (o *SidecarVersion) GetBuildTime() time.Time {
+	if o == nil || o.BuildTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.BuildTime
+}
+
+// GetBuildTimeOk returns a tuple with the BuildTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SidecarVersion) GetBuildTimeOk() (*time.Time, bool) {
+	if o == nil || o.BuildTime == nil {
+		return nil, false
+	}
+	return o.BuildTime, true
+}
+
+// HasBuildTime returns a boolean if a field has been set.
+func (o *SidecarVersion) HasBuildTime() bool {
+	if o != nil && o.BuildTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetBuildTime gets a reference to the given time.Time and assigns it to the BuildTime field.
+func (o *SidecarVersion) SetBuildTime(v time.Time) {
+	o.BuildTime = &v
+}
+
+// GetGitCommit returns the GitCommit field value if set, zero value otherwise.
+func (o *SidecarVersion) GetGitCommit() string {
+	if o == nil || o.GitCommit == nil {
+		var ret string
+		return ret
+	}
+	return *o.GitCommit
+}
+
+// GetGitCommitOk returns a tuple with the GitCommit field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SidecarVersion) GetGitCommitOk() (*string, bool) {
+	if o == nil || o.GitCommit == nil {
+		return nil, false
+	}
+	return o.GitCommit, true
+}
+
+// HasGitCommit returns a boolean if a field has been set.
+func (o *SidecarVersion) HasGitCommit() bool {
+	if o != nil && o.GitCommit != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetGitCommit gets a reference to the given string and assigns it to the GitCommit field.
+func (o *SidecarVersion) SetGitCommit(v string) {
+	o.GitCommit = &v
+}
+
+func (o SidecarVersion) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if o.Version != nil {
+		toSerialize["version"] = o.Version
+	}
+	if o.BuildTime != nil {
+		toSerialize["buildTime"] = o.BuildTime
+	}
+	if o.GitCommit != nil {
+		toSerialize["gitCommit"] = o.GitCommit
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableSidecarVersion struct {
+	value *SidecarVersion
+	isSet bool
+}
+
+func (v NullableSidecarVersion) Get() *SidecarVersion {
+	return v.value
+}
+
+func (v *NullableSidecarVersion) Set(val *SidecarVersion) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableSidecarVersion) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableSidecarVersion) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableSidecarVersion(val *SidecarVersion) *NullableSidecarVersion {
+	return &NullableSidecarVersion{value: val, isSet: true}
+}
+
+func (v NullableSidecarVersion) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableSidecarVersion) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

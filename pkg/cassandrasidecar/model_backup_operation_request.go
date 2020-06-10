@@ -9,6 +9,11 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // BackupOperationRequest struct for BackupOperationRequest
 type BackupOperationRequest struct {
 	// type of operation, one has to set it to 'backup' in case he wants this request to be considered as a backup one 
@@ -16,24 +21,523 @@ type BackupOperationRequest struct {
 	// location where SSTables will be uploaded. A value of the storageLocation property has to have exact format which is 'protocol://bucket/clusterName/dcName/nodeName'. protocol is either 'gcp', 's3', 'azure' or 'file:/'. For global requests, dcName and nodeName are changed automatically as these values are read from Cassandra and storageLocation is updated automatically for every node a specific backup request will be submitted to so the value of dcName and nodeName is irrelevant for global requests as they will be modified every time, a bucket does not need to exist, it will be created automatically if it does not, clusterName has to be specified. There might be automatic resolution of clusterName in the future however for now, one has to supply this property on his own. 
 	StorageLocation string `json:"storageLocation"`
 	// directory of Cassandra, by default it is /var/lib/cassandra, in this path, one expects there is 'data' directory 
-	CassandraDirectory string `json:"cassandraDirectory,omitempty"`
+	CassandraDirectory *string `json:"cassandraDirectory,omitempty"`
 	// Based on this field, there will be throughtput per second computed based on what size data we want to upload we have. The formula is \"size / duration\". The lower the duration is, the higher throughput per second we will need and vice versa. This will influence e.g. responsiveness of a node to its business requests so one can control how much bandwidth is used for backup purposes in case a cluster is fully operational. The format of this field is \"amount unit\". 'unit' is just a (case-insensitive) java.util.concurrent.TimeUnit enum value. If not used, there will not be any restrictions as how fast an upload can be. 
-	Duration string `json:"duration,omitempty"`
-	Bandwidth DataRate `json:"bandwidth,omitempty"`
+	Duration *string `json:"duration,omitempty"`
+	Bandwidth *DataRate `json:"bandwidth,omitempty"`
 	// number of threads used for upload, there might be at most so many uploading threads at any given time, when not set, it defaults to 10 
-	ConcurrentConnections int32 `json:"concurrentConnections,omitempty"`
+	ConcurrentConnections *int32 `json:"concurrentConnections,omitempty"`
 	// path to file which will be used for locking the critical logic dealing with backups, this locking is done by locking a file on a file system so other execution will not proceed until the former one has finished. By default, this path is System.getProperty(\"java.io.tmpdir\") + \"/global-transfer-lock\". 
-	LockFile string `json:"lockFile,omitempty"`
+	LockFile *string `json:"lockFile,omitempty"`
 	// name of snapshot to make so this snapshot will be uploaded to storage location. If not specified, the name of snapshot will be automatically generated and it will have name 'autosnap-milliseconds-since-epoch' 
-	SnapshotTag string `json:"snapshotTag,omitempty"`
+	SnapshotTag *string `json:"snapshotTag,omitempty"`
 	// name of datacenter to backup, nodes in the other datacenter(s) will not be involved 
-	Dc string `json:"dc,omitempty"`
+	Dc *string `json:"dc,omitempty"`
 	// database entities to backup, it might be either only keyspaces or only tables (from different keyspaces if needed), e.g. 'k1,k2' if one wants to backup whole keyspaces and 'ks1.t1,ks2,t2' if one wants to backup tables. These formats can not be used together so 'k1,k2.t2' is invalid. If this field is empty, all keyspaces are backed up.
-	Entities string `json:"entities,omitempty"`
+	Entities *string `json:"entities,omitempty"`
 	// name of Kubernetes namespace to fetch Kubernetes secret for backups from, when not specified, it defaults to 'default' 
-	K8sNamespace string `json:"k8sNamespace,omitempty"`
+	K8sNamespace *string `json:"k8sNamespace,omitempty"`
 	// name of Kubernetes secret from which credentials used for the communication to cloud storage providers are read, if not specified, secret name to be read will be automatically derived in form 'cassandra-backup-restore-secret-cluster-{name-of-cluster}'. These secrets are used only in case protocol in storageLocation is gcp, azure or s3. 
-	K8sBackupSecretName string `json:"k8sBackupSecretName,omitempty"`
+	K8sBackupSecretName *string `json:"k8sBackupSecretName,omitempty"`
 	// flag saying if this request is meant to be global or not, once a global backup request is submitted to Sidecar, it will coordinate backup for all other nodes in a cluster (including itself) so from a point of view of a caller, one might just backup whole cluster by one request and repeatedly query its status based on returned operation id. 
-	GlobalRequest bool `json:"globalRequest,omitempty"`
+	GlobalRequest *bool `json:"globalRequest,omitempty"`
+}
+
+// NewBackupOperationRequest instantiates a new BackupOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewBackupOperationRequest(type_ string, storageLocation string, ) *BackupOperationRequest {
+	this := BackupOperationRequest{}
+	this.Type = type_
+	this.StorageLocation = storageLocation
+	return &this
+}
+
+// NewBackupOperationRequestWithDefaults instantiates a new BackupOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewBackupOperationRequestWithDefaults() *BackupOperationRequest {
+	this := BackupOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *BackupOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *BackupOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetStorageLocation returns the StorageLocation field value
+func (o *BackupOperationRequest) GetStorageLocation() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.StorageLocation
+}
+
+// GetStorageLocationOk returns a tuple with the StorageLocation field value
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetStorageLocationOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.StorageLocation, true
+}
+
+// SetStorageLocation sets field value
+func (o *BackupOperationRequest) SetStorageLocation(v string) {
+	o.StorageLocation = v
+}
+
+// GetCassandraDirectory returns the CassandraDirectory field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetCassandraDirectory() string {
+	if o == nil || o.CassandraDirectory == nil {
+		var ret string
+		return ret
+	}
+	return *o.CassandraDirectory
+}
+
+// GetCassandraDirectoryOk returns a tuple with the CassandraDirectory field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetCassandraDirectoryOk() (*string, bool) {
+	if o == nil || o.CassandraDirectory == nil {
+		return nil, false
+	}
+	return o.CassandraDirectory, true
+}
+
+// HasCassandraDirectory returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasCassandraDirectory() bool {
+	if o != nil && o.CassandraDirectory != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCassandraDirectory gets a reference to the given string and assigns it to the CassandraDirectory field.
+func (o *BackupOperationRequest) SetCassandraDirectory(v string) {
+	o.CassandraDirectory = &v
+}
+
+// GetDuration returns the Duration field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetDuration() string {
+	if o == nil || o.Duration == nil {
+		var ret string
+		return ret
+	}
+	return *o.Duration
+}
+
+// GetDurationOk returns a tuple with the Duration field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetDurationOk() (*string, bool) {
+	if o == nil || o.Duration == nil {
+		return nil, false
+	}
+	return o.Duration, true
+}
+
+// HasDuration returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasDuration() bool {
+	if o != nil && o.Duration != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDuration gets a reference to the given string and assigns it to the Duration field.
+func (o *BackupOperationRequest) SetDuration(v string) {
+	o.Duration = &v
+}
+
+// GetBandwidth returns the Bandwidth field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetBandwidth() DataRate {
+	if o == nil || o.Bandwidth == nil {
+		var ret DataRate
+		return ret
+	}
+	return *o.Bandwidth
+}
+
+// GetBandwidthOk returns a tuple with the Bandwidth field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetBandwidthOk() (*DataRate, bool) {
+	if o == nil || o.Bandwidth == nil {
+		return nil, false
+	}
+	return o.Bandwidth, true
+}
+
+// HasBandwidth returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasBandwidth() bool {
+	if o != nil && o.Bandwidth != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetBandwidth gets a reference to the given DataRate and assigns it to the Bandwidth field.
+func (o *BackupOperationRequest) SetBandwidth(v DataRate) {
+	o.Bandwidth = &v
+}
+
+// GetConcurrentConnections returns the ConcurrentConnections field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetConcurrentConnections() int32 {
+	if o == nil || o.ConcurrentConnections == nil {
+		var ret int32
+		return ret
+	}
+	return *o.ConcurrentConnections
+}
+
+// GetConcurrentConnectionsOk returns a tuple with the ConcurrentConnections field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetConcurrentConnectionsOk() (*int32, bool) {
+	if o == nil || o.ConcurrentConnections == nil {
+		return nil, false
+	}
+	return o.ConcurrentConnections, true
+}
+
+// HasConcurrentConnections returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasConcurrentConnections() bool {
+	if o != nil && o.ConcurrentConnections != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetConcurrentConnections gets a reference to the given int32 and assigns it to the ConcurrentConnections field.
+func (o *BackupOperationRequest) SetConcurrentConnections(v int32) {
+	o.ConcurrentConnections = &v
+}
+
+// GetLockFile returns the LockFile field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetLockFile() string {
+	if o == nil || o.LockFile == nil {
+		var ret string
+		return ret
+	}
+	return *o.LockFile
+}
+
+// GetLockFileOk returns a tuple with the LockFile field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetLockFileOk() (*string, bool) {
+	if o == nil || o.LockFile == nil {
+		return nil, false
+	}
+	return o.LockFile, true
+}
+
+// HasLockFile returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasLockFile() bool {
+	if o != nil && o.LockFile != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetLockFile gets a reference to the given string and assigns it to the LockFile field.
+func (o *BackupOperationRequest) SetLockFile(v string) {
+	o.LockFile = &v
+}
+
+// GetSnapshotTag returns the SnapshotTag field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetSnapshotTag() string {
+	if o == nil || o.SnapshotTag == nil {
+		var ret string
+		return ret
+	}
+	return *o.SnapshotTag
+}
+
+// GetSnapshotTagOk returns a tuple with the SnapshotTag field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetSnapshotTagOk() (*string, bool) {
+	if o == nil || o.SnapshotTag == nil {
+		return nil, false
+	}
+	return o.SnapshotTag, true
+}
+
+// HasSnapshotTag returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasSnapshotTag() bool {
+	if o != nil && o.SnapshotTag != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSnapshotTag gets a reference to the given string and assigns it to the SnapshotTag field.
+func (o *BackupOperationRequest) SetSnapshotTag(v string) {
+	o.SnapshotTag = &v
+}
+
+// GetDc returns the Dc field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetDc() string {
+	if o == nil || o.Dc == nil {
+		var ret string
+		return ret
+	}
+	return *o.Dc
+}
+
+// GetDcOk returns a tuple with the Dc field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetDcOk() (*string, bool) {
+	if o == nil || o.Dc == nil {
+		return nil, false
+	}
+	return o.Dc, true
+}
+
+// HasDc returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasDc() bool {
+	if o != nil && o.Dc != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDc gets a reference to the given string and assigns it to the Dc field.
+func (o *BackupOperationRequest) SetDc(v string) {
+	o.Dc = &v
+}
+
+// GetEntities returns the Entities field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetEntities() string {
+	if o == nil || o.Entities == nil {
+		var ret string
+		return ret
+	}
+	return *o.Entities
+}
+
+// GetEntitiesOk returns a tuple with the Entities field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetEntitiesOk() (*string, bool) {
+	if o == nil || o.Entities == nil {
+		return nil, false
+	}
+	return o.Entities, true
+}
+
+// HasEntities returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasEntities() bool {
+	if o != nil && o.Entities != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetEntities gets a reference to the given string and assigns it to the Entities field.
+func (o *BackupOperationRequest) SetEntities(v string) {
+	o.Entities = &v
+}
+
+// GetK8sNamespace returns the K8sNamespace field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetK8sNamespace() string {
+	if o == nil || o.K8sNamespace == nil {
+		var ret string
+		return ret
+	}
+	return *o.K8sNamespace
+}
+
+// GetK8sNamespaceOk returns a tuple with the K8sNamespace field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetK8sNamespaceOk() (*string, bool) {
+	if o == nil || o.K8sNamespace == nil {
+		return nil, false
+	}
+	return o.K8sNamespace, true
+}
+
+// HasK8sNamespace returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasK8sNamespace() bool {
+	if o != nil && o.K8sNamespace != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetK8sNamespace gets a reference to the given string and assigns it to the K8sNamespace field.
+func (o *BackupOperationRequest) SetK8sNamespace(v string) {
+	o.K8sNamespace = &v
+}
+
+// GetK8sBackupSecretName returns the K8sBackupSecretName field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetK8sBackupSecretName() string {
+	if o == nil || o.K8sBackupSecretName == nil {
+		var ret string
+		return ret
+	}
+	return *o.K8sBackupSecretName
+}
+
+// GetK8sBackupSecretNameOk returns a tuple with the K8sBackupSecretName field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetK8sBackupSecretNameOk() (*string, bool) {
+	if o == nil || o.K8sBackupSecretName == nil {
+		return nil, false
+	}
+	return o.K8sBackupSecretName, true
+}
+
+// HasK8sBackupSecretName returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasK8sBackupSecretName() bool {
+	if o != nil && o.K8sBackupSecretName != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetK8sBackupSecretName gets a reference to the given string and assigns it to the K8sBackupSecretName field.
+func (o *BackupOperationRequest) SetK8sBackupSecretName(v string) {
+	o.K8sBackupSecretName = &v
+}
+
+// GetGlobalRequest returns the GlobalRequest field value if set, zero value otherwise.
+func (o *BackupOperationRequest) GetGlobalRequest() bool {
+	if o == nil || o.GlobalRequest == nil {
+		var ret bool
+		return ret
+	}
+	return *o.GlobalRequest
+}
+
+// GetGlobalRequestOk returns a tuple with the GlobalRequest field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BackupOperationRequest) GetGlobalRequestOk() (*bool, bool) {
+	if o == nil || o.GlobalRequest == nil {
+		return nil, false
+	}
+	return o.GlobalRequest, true
+}
+
+// HasGlobalRequest returns a boolean if a field has been set.
+func (o *BackupOperationRequest) HasGlobalRequest() bool {
+	if o != nil && o.GlobalRequest != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetGlobalRequest gets a reference to the given bool and assigns it to the GlobalRequest field.
+func (o *BackupOperationRequest) SetGlobalRequest(v bool) {
+	o.GlobalRequest = &v
+}
+
+func (o BackupOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["storageLocation"] = o.StorageLocation
+	}
+	if o.CassandraDirectory != nil {
+		toSerialize["cassandraDirectory"] = o.CassandraDirectory
+	}
+	if o.Duration != nil {
+		toSerialize["duration"] = o.Duration
+	}
+	if o.Bandwidth != nil {
+		toSerialize["bandwidth"] = o.Bandwidth
+	}
+	if o.ConcurrentConnections != nil {
+		toSerialize["concurrentConnections"] = o.ConcurrentConnections
+	}
+	if o.LockFile != nil {
+		toSerialize["lockFile"] = o.LockFile
+	}
+	if o.SnapshotTag != nil {
+		toSerialize["snapshotTag"] = o.SnapshotTag
+	}
+	if o.Dc != nil {
+		toSerialize["dc"] = o.Dc
+	}
+	if o.Entities != nil {
+		toSerialize["entities"] = o.Entities
+	}
+	if o.K8sNamespace != nil {
+		toSerialize["k8sNamespace"] = o.K8sNamespace
+	}
+	if o.K8sBackupSecretName != nil {
+		toSerialize["k8sBackupSecretName"] = o.K8sBackupSecretName
+	}
+	if o.GlobalRequest != nil {
+		toSerialize["globalRequest"] = o.GlobalRequest
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableBackupOperationRequest struct {
+	value *BackupOperationRequest
+	isSet bool
+}
+
+func (v NullableBackupOperationRequest) Get() *BackupOperationRequest {
+	return v.value
+}
+
+func (v *NullableBackupOperationRequest) Set(val *BackupOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableBackupOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableBackupOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableBackupOperationRequest(val *BackupOperationRequest) *NullableBackupOperationRequest {
+	return &NullableBackupOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableBackupOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableBackupOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

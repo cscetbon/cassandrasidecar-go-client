@@ -9,11 +9,165 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // FlushOperationRequest flushes tables of a keyspace or all tables of a keyspace when tables are not specified 
 type FlushOperationRequest struct {
 	Type string `json:"type"`
 	// keyspace to flush 
 	Keyspace string `json:"keyspace"`
 	// tables to flush, if not provided or empty, flush all tables in a keyspace 
-	Tables []string `json:"tables,omitempty"`
+	Tables *[]string `json:"tables,omitempty"`
+}
+
+// NewFlushOperationRequest instantiates a new FlushOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewFlushOperationRequest(type_ string, keyspace string, ) *FlushOperationRequest {
+	this := FlushOperationRequest{}
+	this.Type = type_
+	this.Keyspace = keyspace
+	return &this
+}
+
+// NewFlushOperationRequestWithDefaults instantiates a new FlushOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewFlushOperationRequestWithDefaults() *FlushOperationRequest {
+	this := FlushOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *FlushOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *FlushOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *FlushOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *FlushOperationRequest) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *FlushOperationRequest) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *FlushOperationRequest) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTables returns the Tables field value if set, zero value otherwise.
+func (o *FlushOperationRequest) GetTables() []string {
+	if o == nil || o.Tables == nil {
+		var ret []string
+		return ret
+	}
+	return *o.Tables
+}
+
+// GetTablesOk returns a tuple with the Tables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FlushOperationRequest) GetTablesOk() (*[]string, bool) {
+	if o == nil || o.Tables == nil {
+		return nil, false
+	}
+	return o.Tables, true
+}
+
+// HasTables returns a boolean if a field has been set.
+func (o *FlushOperationRequest) HasTables() bool {
+	if o != nil && o.Tables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTables gets a reference to the given []string and assigns it to the Tables field.
+func (o *FlushOperationRequest) SetTables(v []string) {
+	o.Tables = &v
+}
+
+func (o FlushOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Tables != nil {
+		toSerialize["tables"] = o.Tables
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableFlushOperationRequest struct {
+	value *FlushOperationRequest
+	isSet bool
+}
+
+func (v NullableFlushOperationRequest) Get() *FlushOperationRequest {
+	return v.value
+}
+
+func (v *NullableFlushOperationRequest) Set(val *FlushOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableFlushOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableFlushOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableFlushOperationRequest(val *FlushOperationRequest) *NullableFlushOperationRequest {
+	return &NullableFlushOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableFlushOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableFlushOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

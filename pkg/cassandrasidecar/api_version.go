@@ -25,12 +25,29 @@ var (
 // VersionApiService VersionApi service
 type VersionApiService service
 
+type apiVersionCassandraGetRequest struct {
+	ctx _context.Context
+	apiService *VersionApiService
+}
+
+
 /*
 VersionCassandraGet returns version of Cassandra node
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return CassandraVersion
+@return apiVersionCassandraGetRequest
 */
-func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) (CassandraVersion, *_nethttp.Response, error) {
+func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) apiVersionCassandraGetRequest {
+	return apiVersionCassandraGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+ @return CassandraVersion
+*/
+func (r apiVersionCassandraGetRequest) Execute() (CassandraVersion, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -40,8 +57,13 @@ func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) (Cassandra
 		localVarReturnValue  CassandraVersion
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/version/cassandra"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "VersionApiService.VersionCassandraGet")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/version/cassandra"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -63,12 +85,12 @@ func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) (Cassandra
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -86,7 +108,7 @@ func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) (Cassandra
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
 			var v CassandraVersion
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -96,7 +118,7 @@ func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) (Cassandra
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	err = r.apiService.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
@@ -107,13 +129,29 @@ func (a *VersionApiService) VersionCassandraGet(ctx _context.Context) (Cassandra
 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
+type apiVersionGetRequest struct {
+	ctx _context.Context
+	apiService *VersionApiService
+}
+
 
 /*
 VersionGet returns version of Cassandra Sidecar itself
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return SidecarVersion
+@return apiVersionGetRequest
 */
-func (a *VersionApiService) VersionGet(ctx _context.Context) (SidecarVersion, *_nethttp.Response, error) {
+func (a *VersionApiService) VersionGet(ctx _context.Context) apiVersionGetRequest {
+	return apiVersionGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+ @return SidecarVersion
+*/
+func (r apiVersionGetRequest) Execute() (SidecarVersion, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -123,8 +161,13 @@ func (a *VersionApiService) VersionGet(ctx _context.Context) (SidecarVersion, *_
 		localVarReturnValue  SidecarVersion
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/version"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "VersionApiService.VersionGet")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/version"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -146,12 +189,12 @@ func (a *VersionApiService) VersionGet(ctx _context.Context) (SidecarVersion, *_
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -169,7 +212,7 @@ func (a *VersionApiService) VersionGet(ctx _context.Context) (SidecarVersion, *_
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
 			var v SidecarVersion
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -179,7 +222,7 @@ func (a *VersionApiService) VersionGet(ctx _context.Context) (SidecarVersion, *_
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	err = r.apiService.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
@@ -190,13 +233,29 @@ func (a *VersionApiService) VersionGet(ctx _context.Context) (SidecarVersion, *_
 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
+type apiVersionSchemaGetRequest struct {
+	ctx _context.Context
+	apiService *VersionApiService
+}
+
 
 /*
 VersionSchemaGet returns schema version this Cassandra node is on, same as calling StorageServiceMBean#getSchemaVersion
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return CassandraSchemaVersion
+@return apiVersionSchemaGetRequest
 */
-func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSchemaVersion, *_nethttp.Response, error) {
+func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) apiVersionSchemaGetRequest {
+	return apiVersionSchemaGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+ @return CassandraSchemaVersion
+*/
+func (r apiVersionSchemaGetRequest) Execute() (CassandraSchemaVersion, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -206,8 +265,13 @@ func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSch
 		localVarReturnValue  CassandraSchemaVersion
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/version/schema"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "VersionApiService.VersionSchemaGet")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/version/schema"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -229,12 +293,12 @@ func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSch
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -252,7 +316,7 @@ func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSch
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
 			var v CassandraSchemaVersion
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -262,7 +326,7 @@ func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSch
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v CassandraSchemaVersionException
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -272,7 +336,7 @@ func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSch
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	err = r.apiService.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
@@ -283,13 +347,29 @@ func (a *VersionApiService) VersionSchemaGet(ctx _context.Context) (CassandraSch
 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
+type apiVersionSidecarGetRequest struct {
+	ctx _context.Context
+	apiService *VersionApiService
+}
+
 
 /*
 VersionSidecarGet alias for /version endpoint, returns version of Cassandra Sidecar itself
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return SidecarVersion
+@return apiVersionSidecarGetRequest
 */
-func (a *VersionApiService) VersionSidecarGet(ctx _context.Context) (SidecarVersion, *_nethttp.Response, error) {
+func (a *VersionApiService) VersionSidecarGet(ctx _context.Context) apiVersionSidecarGetRequest {
+	return apiVersionSidecarGetRequest{
+		apiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+Execute executes the request
+ @return SidecarVersion
+*/
+func (r apiVersionSidecarGetRequest) Execute() (SidecarVersion, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -299,8 +379,13 @@ func (a *VersionApiService) VersionSidecarGet(ctx _context.Context) (SidecarVers
 		localVarReturnValue  SidecarVersion
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/version/sidecar"
+	localBasePath, err := r.apiService.client.cfg.ServerURLWithContext(r.ctx, "VersionApiService.VersionSidecarGet")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/version/sidecar"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -322,12 +407,12 @@ func (a *VersionApiService) VersionSidecarGet(ctx _context.Context) (SidecarVers
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := r.apiService.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := r.apiService.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -345,7 +430,7 @@ func (a *VersionApiService) VersionSidecarGet(ctx _context.Context) (SidecarVers
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
 			var v SidecarVersion
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			err = r.apiService.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
@@ -355,7 +440,7 @@ func (a *VersionApiService) VersionSidecarGet(ctx _context.Context) (SidecarVers
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	err = r.apiService.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,

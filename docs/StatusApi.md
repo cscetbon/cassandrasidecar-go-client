@@ -10,13 +10,18 @@ Method | HTTP request | Description
 
 ## StatusGet
 
-> CassandraStatus StatusGet(ctx, )
+> CassandraStatus StatusGet(ctx).Execute()
 
 returns a state of a Cassandra node
 
-### Required Parameters
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiStatusGetRequest struct via the builder pattern
+
 
 ### Return type
 

@@ -9,15 +9,239 @@
  */
 
 package cassandrasidecar
-// UpgradeSsTablesOperationRequest struct for UpgradeSsTablesOperationRequest
-type UpgradeSsTablesOperationRequest struct {
+
+import (
+	"encoding/json"
+)
+
+// UpgradeSSTablesOperationRequest struct for UpgradeSSTablesOperationRequest
+type UpgradeSSTablesOperationRequest struct {
 	Type string `json:"type"`
 	// keyspace to upgrade SSTables of 
 	Keyspace string `json:"keyspace"`
 	// an array of tables to upgrade SSTables of, empty or not provided array will default to upgrading of SSTables of all tables in respective keyspace 
-	Tables []string `json:"tables,omitempty"`
+	Tables *[]string `json:"tables,omitempty"`
 	// the number of threads to use - 0 means use all available, it never uses more than concurrent_compactor threads 
-	Jobs int32 `json:"jobs,omitempty"`
+	Jobs *int32 `json:"jobs,omitempty"`
 	// include all sstables, even those already on the current version, defaults to false
-	IncludeAllSStables bool `json:"includeAllSStables,omitempty"`
+	IncludeAllSStables *bool `json:"includeAllSStables,omitempty"`
+}
+
+// NewUpgradeSSTablesOperationRequest instantiates a new UpgradeSSTablesOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewUpgradeSSTablesOperationRequest(type_ string, keyspace string, ) *UpgradeSSTablesOperationRequest {
+	this := UpgradeSSTablesOperationRequest{}
+	this.Type = type_
+	this.Keyspace = keyspace
+	return &this
+}
+
+// NewUpgradeSSTablesOperationRequestWithDefaults instantiates a new UpgradeSSTablesOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewUpgradeSSTablesOperationRequestWithDefaults() *UpgradeSSTablesOperationRequest {
+	this := UpgradeSSTablesOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *UpgradeSSTablesOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *UpgradeSSTablesOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *UpgradeSSTablesOperationRequest) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationRequest) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *UpgradeSSTablesOperationRequest) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTables returns the Tables field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationRequest) GetTables() []string {
+	if o == nil || o.Tables == nil {
+		var ret []string
+		return ret
+	}
+	return *o.Tables
+}
+
+// GetTablesOk returns a tuple with the Tables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationRequest) GetTablesOk() (*[]string, bool) {
+	if o == nil || o.Tables == nil {
+		return nil, false
+	}
+	return o.Tables, true
+}
+
+// HasTables returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationRequest) HasTables() bool {
+	if o != nil && o.Tables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTables gets a reference to the given []string and assigns it to the Tables field.
+func (o *UpgradeSSTablesOperationRequest) SetTables(v []string) {
+	o.Tables = &v
+}
+
+// GetJobs returns the Jobs field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationRequest) GetJobs() int32 {
+	if o == nil || o.Jobs == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Jobs
+}
+
+// GetJobsOk returns a tuple with the Jobs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationRequest) GetJobsOk() (*int32, bool) {
+	if o == nil || o.Jobs == nil {
+		return nil, false
+	}
+	return o.Jobs, true
+}
+
+// HasJobs returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationRequest) HasJobs() bool {
+	if o != nil && o.Jobs != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetJobs gets a reference to the given int32 and assigns it to the Jobs field.
+func (o *UpgradeSSTablesOperationRequest) SetJobs(v int32) {
+	o.Jobs = &v
+}
+
+// GetIncludeAllSStables returns the IncludeAllSStables field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationRequest) GetIncludeAllSStables() bool {
+	if o == nil || o.IncludeAllSStables == nil {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeAllSStables
+}
+
+// GetIncludeAllSStablesOk returns a tuple with the IncludeAllSStables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationRequest) GetIncludeAllSStablesOk() (*bool, bool) {
+	if o == nil || o.IncludeAllSStables == nil {
+		return nil, false
+	}
+	return o.IncludeAllSStables, true
+}
+
+// HasIncludeAllSStables returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationRequest) HasIncludeAllSStables() bool {
+	if o != nil && o.IncludeAllSStables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeAllSStables gets a reference to the given bool and assigns it to the IncludeAllSStables field.
+func (o *UpgradeSSTablesOperationRequest) SetIncludeAllSStables(v bool) {
+	o.IncludeAllSStables = &v
+}
+
+func (o UpgradeSSTablesOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Tables != nil {
+		toSerialize["tables"] = o.Tables
+	}
+	if o.Jobs != nil {
+		toSerialize["jobs"] = o.Jobs
+	}
+	if o.IncludeAllSStables != nil {
+		toSerialize["includeAllSStables"] = o.IncludeAllSStables
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableUpgradeSSTablesOperationRequest struct {
+	value *UpgradeSSTablesOperationRequest
+	isSet bool
+}
+
+func (v NullableUpgradeSSTablesOperationRequest) Get() *UpgradeSSTablesOperationRequest {
+	return v.value
+}
+
+func (v *NullableUpgradeSSTablesOperationRequest) Set(val *UpgradeSSTablesOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableUpgradeSSTablesOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableUpgradeSSTablesOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableUpgradeSSTablesOperationRequest(val *UpgradeSSTablesOperationRequest) *NullableUpgradeSSTablesOperationRequest {
+	return &NullableUpgradeSSTablesOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableUpgradeSSTablesOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableUpgradeSSTablesOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

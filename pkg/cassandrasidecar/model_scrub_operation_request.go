@@ -9,21 +9,350 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // ScrubOperationRequest struct for ScrubOperationRequest
 type ScrubOperationRequest struct {
 	Type string `json:"type"`
 	// keyspace to scrub 
 	Keyspace string `json:"keyspace"`
 	// tables to scrub, empty or not provided will scrub all tables in respective keyspace 
-	Tables []string `json:"tables,omitempty"`
+	Tables *[]string `json:"tables,omitempty"`
 	// number of sstables to scrub simultanously, set to 0 to use all available compaction threads 
-	Jobs int32 `json:"jobs,omitempty"`
+	Jobs *int32 `json:"jobs,omitempty"`
 	// scrubbed CFs will be snapshotted first, defaults to false 
-	DisableSnapshot bool `json:"disableSnapshot,omitempty"`
+	DisableSnapshot *bool `json:"disableSnapshot,omitempty"`
 	// skip corrupted partitions even when scrubbing counter tables, defaults to false 
-	SkipCorrupted bool `json:"skipCorrupted,omitempty"`
+	SkipCorrupted *bool `json:"skipCorrupted,omitempty"`
 	// do not validate columns using column validator, defaults to false 
-	NoValidate bool `json:"noValidate,omitempty"`
+	NoValidate *bool `json:"noValidate,omitempty"`
 	// Rewrites rows with overflowed expiration date affected by CASSANDRA-14092 with the maximum supported expiration date of 2038-01-19T03:14:06+00:00. The rows are rewritten with the original timestamp incremented by one millisecond to override/supersede any potential tombstone that may have been generated during compaction of the affected rows. 
-	ReinsertOverflowedTTL bool `json:"reinsertOverflowedTTL,omitempty"`
+	ReinsertOverflowedTTL *bool `json:"reinsertOverflowedTTL,omitempty"`
+}
+
+// NewScrubOperationRequest instantiates a new ScrubOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewScrubOperationRequest(type_ string, keyspace string, ) *ScrubOperationRequest {
+	this := ScrubOperationRequest{}
+	this.Type = type_
+	this.Keyspace = keyspace
+	return &this
+}
+
+// NewScrubOperationRequestWithDefaults instantiates a new ScrubOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewScrubOperationRequestWithDefaults() *ScrubOperationRequest {
+	this := ScrubOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *ScrubOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *ScrubOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *ScrubOperationRequest) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *ScrubOperationRequest) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTables returns the Tables field value if set, zero value otherwise.
+func (o *ScrubOperationRequest) GetTables() []string {
+	if o == nil || o.Tables == nil {
+		var ret []string
+		return ret
+	}
+	return *o.Tables
+}
+
+// GetTablesOk returns a tuple with the Tables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetTablesOk() (*[]string, bool) {
+	if o == nil || o.Tables == nil {
+		return nil, false
+	}
+	return o.Tables, true
+}
+
+// HasTables returns a boolean if a field has been set.
+func (o *ScrubOperationRequest) HasTables() bool {
+	if o != nil && o.Tables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTables gets a reference to the given []string and assigns it to the Tables field.
+func (o *ScrubOperationRequest) SetTables(v []string) {
+	o.Tables = &v
+}
+
+// GetJobs returns the Jobs field value if set, zero value otherwise.
+func (o *ScrubOperationRequest) GetJobs() int32 {
+	if o == nil || o.Jobs == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Jobs
+}
+
+// GetJobsOk returns a tuple with the Jobs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetJobsOk() (*int32, bool) {
+	if o == nil || o.Jobs == nil {
+		return nil, false
+	}
+	return o.Jobs, true
+}
+
+// HasJobs returns a boolean if a field has been set.
+func (o *ScrubOperationRequest) HasJobs() bool {
+	if o != nil && o.Jobs != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetJobs gets a reference to the given int32 and assigns it to the Jobs field.
+func (o *ScrubOperationRequest) SetJobs(v int32) {
+	o.Jobs = &v
+}
+
+// GetDisableSnapshot returns the DisableSnapshot field value if set, zero value otherwise.
+func (o *ScrubOperationRequest) GetDisableSnapshot() bool {
+	if o == nil || o.DisableSnapshot == nil {
+		var ret bool
+		return ret
+	}
+	return *o.DisableSnapshot
+}
+
+// GetDisableSnapshotOk returns a tuple with the DisableSnapshot field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetDisableSnapshotOk() (*bool, bool) {
+	if o == nil || o.DisableSnapshot == nil {
+		return nil, false
+	}
+	return o.DisableSnapshot, true
+}
+
+// HasDisableSnapshot returns a boolean if a field has been set.
+func (o *ScrubOperationRequest) HasDisableSnapshot() bool {
+	if o != nil && o.DisableSnapshot != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDisableSnapshot gets a reference to the given bool and assigns it to the DisableSnapshot field.
+func (o *ScrubOperationRequest) SetDisableSnapshot(v bool) {
+	o.DisableSnapshot = &v
+}
+
+// GetSkipCorrupted returns the SkipCorrupted field value if set, zero value otherwise.
+func (o *ScrubOperationRequest) GetSkipCorrupted() bool {
+	if o == nil || o.SkipCorrupted == nil {
+		var ret bool
+		return ret
+	}
+	return *o.SkipCorrupted
+}
+
+// GetSkipCorruptedOk returns a tuple with the SkipCorrupted field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetSkipCorruptedOk() (*bool, bool) {
+	if o == nil || o.SkipCorrupted == nil {
+		return nil, false
+	}
+	return o.SkipCorrupted, true
+}
+
+// HasSkipCorrupted returns a boolean if a field has been set.
+func (o *ScrubOperationRequest) HasSkipCorrupted() bool {
+	if o != nil && o.SkipCorrupted != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSkipCorrupted gets a reference to the given bool and assigns it to the SkipCorrupted field.
+func (o *ScrubOperationRequest) SetSkipCorrupted(v bool) {
+	o.SkipCorrupted = &v
+}
+
+// GetNoValidate returns the NoValidate field value if set, zero value otherwise.
+func (o *ScrubOperationRequest) GetNoValidate() bool {
+	if o == nil || o.NoValidate == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoValidate
+}
+
+// GetNoValidateOk returns a tuple with the NoValidate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetNoValidateOk() (*bool, bool) {
+	if o == nil || o.NoValidate == nil {
+		return nil, false
+	}
+	return o.NoValidate, true
+}
+
+// HasNoValidate returns a boolean if a field has been set.
+func (o *ScrubOperationRequest) HasNoValidate() bool {
+	if o != nil && o.NoValidate != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoValidate gets a reference to the given bool and assigns it to the NoValidate field.
+func (o *ScrubOperationRequest) SetNoValidate(v bool) {
+	o.NoValidate = &v
+}
+
+// GetReinsertOverflowedTTL returns the ReinsertOverflowedTTL field value if set, zero value otherwise.
+func (o *ScrubOperationRequest) GetReinsertOverflowedTTL() bool {
+	if o == nil || o.ReinsertOverflowedTTL == nil {
+		var ret bool
+		return ret
+	}
+	return *o.ReinsertOverflowedTTL
+}
+
+// GetReinsertOverflowedTTLOk returns a tuple with the ReinsertOverflowedTTL field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScrubOperationRequest) GetReinsertOverflowedTTLOk() (*bool, bool) {
+	if o == nil || o.ReinsertOverflowedTTL == nil {
+		return nil, false
+	}
+	return o.ReinsertOverflowedTTL, true
+}
+
+// HasReinsertOverflowedTTL returns a boolean if a field has been set.
+func (o *ScrubOperationRequest) HasReinsertOverflowedTTL() bool {
+	if o != nil && o.ReinsertOverflowedTTL != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetReinsertOverflowedTTL gets a reference to the given bool and assigns it to the ReinsertOverflowedTTL field.
+func (o *ScrubOperationRequest) SetReinsertOverflowedTTL(v bool) {
+	o.ReinsertOverflowedTTL = &v
+}
+
+func (o ScrubOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Tables != nil {
+		toSerialize["tables"] = o.Tables
+	}
+	if o.Jobs != nil {
+		toSerialize["jobs"] = o.Jobs
+	}
+	if o.DisableSnapshot != nil {
+		toSerialize["disableSnapshot"] = o.DisableSnapshot
+	}
+	if o.SkipCorrupted != nil {
+		toSerialize["skipCorrupted"] = o.SkipCorrupted
+	}
+	if o.NoValidate != nil {
+		toSerialize["noValidate"] = o.NoValidate
+	}
+	if o.ReinsertOverflowedTTL != nil {
+		toSerialize["reinsertOverflowedTTL"] = o.ReinsertOverflowedTTL
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableScrubOperationRequest struct {
+	value *ScrubOperationRequest
+	isSet bool
+}
+
+func (v NullableScrubOperationRequest) Get() *ScrubOperationRequest {
+	return v.value
+}
+
+func (v *NullableScrubOperationRequest) Set(val *ScrubOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableScrubOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableScrubOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableScrubOperationRequest(val *ScrubOperationRequest) *NullableScrubOperationRequest {
+	return &NullableScrubOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableScrubOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableScrubOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

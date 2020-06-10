@@ -9,19 +9,453 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // ImportOperationRequest object used upon restoration, keyspace and table fields do not need to be set when restoration strategy type is IMPORT or HARDLINKS as this object will be initialised for each entities entry with right keyspace and table. 'sourceDir' property is used for pointing to a directory where we expect to find downloaded SSTables. This in turn means that all SSTables and other meta files will be downloaded into this directory (from which they will be fed to CFSMB). All other fields are taken from ColumnFamilyStoreMBean#importNewSSTables. 
 type ImportOperationRequest struct {
 	// has to be set to 'import' 
 	Type string `json:"type"`
-	Keyspace string `json:"keyspace,omitempty"`
-	Table string `json:"table,omitempty"`
+	Keyspace *string `json:"keyspace,omitempty"`
+	Table *string `json:"table,omitempty"`
 	SourceDir string `json:"sourceDir"`
-	KeepLevel bool `json:"keepLevel,omitempty"`
-	KeepRepaired bool `json:"keepRepaired,omitempty"`
-	NoVerify bool `json:"noVerify,omitempty"`
-	NoVerifyTokens bool `json:"noVerifyTokens,omitempty"`
-	NoInvalidateCaches bool `json:"noInvalidateCaches,omitempty"`
+	KeepLevel *bool `json:"keepLevel,omitempty"`
+	KeepRepaired *bool `json:"keepRepaired,omitempty"`
+	NoVerify *bool `json:"noVerify,omitempty"`
+	NoVerifyTokens *bool `json:"noVerifyTokens,omitempty"`
+	NoInvalidateCaches *bool `json:"noInvalidateCaches,omitempty"`
 	// defaults to false, if true, noVerifyTokens, noInvalidateCaches and noVerify will be set to true automatically 
-	Quick bool `json:"quick,omitempty"`
-	ExtendedVerify bool `json:"extendedVerify,omitempty"`
+	Quick *bool `json:"quick,omitempty"`
+	ExtendedVerify *bool `json:"extendedVerify,omitempty"`
+}
+
+// NewImportOperationRequest instantiates a new ImportOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewImportOperationRequest(type_ string, sourceDir string, ) *ImportOperationRequest {
+	this := ImportOperationRequest{}
+	this.Type = type_
+	this.SourceDir = sourceDir
+	return &this
+}
+
+// NewImportOperationRequestWithDefaults instantiates a new ImportOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewImportOperationRequestWithDefaults() *ImportOperationRequest {
+	this := ImportOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *ImportOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *ImportOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetKeyspace returns the Keyspace field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetKeyspace() string {
+	if o == nil || o.Keyspace == nil {
+		var ret string
+		return ret
+	}
+	return *o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetKeyspaceOk() (*string, bool) {
+	if o == nil || o.Keyspace == nil {
+		return nil, false
+	}
+	return o.Keyspace, true
+}
+
+// HasKeyspace returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasKeyspace() bool {
+	if o != nil && o.Keyspace != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKeyspace gets a reference to the given string and assigns it to the Keyspace field.
+func (o *ImportOperationRequest) SetKeyspace(v string) {
+	o.Keyspace = &v
+}
+
+// GetTable returns the Table field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetTable() string {
+	if o == nil || o.Table == nil {
+		var ret string
+		return ret
+	}
+	return *o.Table
+}
+
+// GetTableOk returns a tuple with the Table field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetTableOk() (*string, bool) {
+	if o == nil || o.Table == nil {
+		return nil, false
+	}
+	return o.Table, true
+}
+
+// HasTable returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasTable() bool {
+	if o != nil && o.Table != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTable gets a reference to the given string and assigns it to the Table field.
+func (o *ImportOperationRequest) SetTable(v string) {
+	o.Table = &v
+}
+
+// GetSourceDir returns the SourceDir field value
+func (o *ImportOperationRequest) GetSourceDir() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.SourceDir
+}
+
+// GetSourceDirOk returns a tuple with the SourceDir field value
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetSourceDirOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.SourceDir, true
+}
+
+// SetSourceDir sets field value
+func (o *ImportOperationRequest) SetSourceDir(v string) {
+	o.SourceDir = v
+}
+
+// GetKeepLevel returns the KeepLevel field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetKeepLevel() bool {
+	if o == nil || o.KeepLevel == nil {
+		var ret bool
+		return ret
+	}
+	return *o.KeepLevel
+}
+
+// GetKeepLevelOk returns a tuple with the KeepLevel field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetKeepLevelOk() (*bool, bool) {
+	if o == nil || o.KeepLevel == nil {
+		return nil, false
+	}
+	return o.KeepLevel, true
+}
+
+// HasKeepLevel returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasKeepLevel() bool {
+	if o != nil && o.KeepLevel != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKeepLevel gets a reference to the given bool and assigns it to the KeepLevel field.
+func (o *ImportOperationRequest) SetKeepLevel(v bool) {
+	o.KeepLevel = &v
+}
+
+// GetKeepRepaired returns the KeepRepaired field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetKeepRepaired() bool {
+	if o == nil || o.KeepRepaired == nil {
+		var ret bool
+		return ret
+	}
+	return *o.KeepRepaired
+}
+
+// GetKeepRepairedOk returns a tuple with the KeepRepaired field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetKeepRepairedOk() (*bool, bool) {
+	if o == nil || o.KeepRepaired == nil {
+		return nil, false
+	}
+	return o.KeepRepaired, true
+}
+
+// HasKeepRepaired returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasKeepRepaired() bool {
+	if o != nil && o.KeepRepaired != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKeepRepaired gets a reference to the given bool and assigns it to the KeepRepaired field.
+func (o *ImportOperationRequest) SetKeepRepaired(v bool) {
+	o.KeepRepaired = &v
+}
+
+// GetNoVerify returns the NoVerify field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetNoVerify() bool {
+	if o == nil || o.NoVerify == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoVerify
+}
+
+// GetNoVerifyOk returns a tuple with the NoVerify field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetNoVerifyOk() (*bool, bool) {
+	if o == nil || o.NoVerify == nil {
+		return nil, false
+	}
+	return o.NoVerify, true
+}
+
+// HasNoVerify returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasNoVerify() bool {
+	if o != nil && o.NoVerify != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoVerify gets a reference to the given bool and assigns it to the NoVerify field.
+func (o *ImportOperationRequest) SetNoVerify(v bool) {
+	o.NoVerify = &v
+}
+
+// GetNoVerifyTokens returns the NoVerifyTokens field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetNoVerifyTokens() bool {
+	if o == nil || o.NoVerifyTokens == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoVerifyTokens
+}
+
+// GetNoVerifyTokensOk returns a tuple with the NoVerifyTokens field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetNoVerifyTokensOk() (*bool, bool) {
+	if o == nil || o.NoVerifyTokens == nil {
+		return nil, false
+	}
+	return o.NoVerifyTokens, true
+}
+
+// HasNoVerifyTokens returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasNoVerifyTokens() bool {
+	if o != nil && o.NoVerifyTokens != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoVerifyTokens gets a reference to the given bool and assigns it to the NoVerifyTokens field.
+func (o *ImportOperationRequest) SetNoVerifyTokens(v bool) {
+	o.NoVerifyTokens = &v
+}
+
+// GetNoInvalidateCaches returns the NoInvalidateCaches field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetNoInvalidateCaches() bool {
+	if o == nil || o.NoInvalidateCaches == nil {
+		var ret bool
+		return ret
+	}
+	return *o.NoInvalidateCaches
+}
+
+// GetNoInvalidateCachesOk returns a tuple with the NoInvalidateCaches field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetNoInvalidateCachesOk() (*bool, bool) {
+	if o == nil || o.NoInvalidateCaches == nil {
+		return nil, false
+	}
+	return o.NoInvalidateCaches, true
+}
+
+// HasNoInvalidateCaches returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasNoInvalidateCaches() bool {
+	if o != nil && o.NoInvalidateCaches != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNoInvalidateCaches gets a reference to the given bool and assigns it to the NoInvalidateCaches field.
+func (o *ImportOperationRequest) SetNoInvalidateCaches(v bool) {
+	o.NoInvalidateCaches = &v
+}
+
+// GetQuick returns the Quick field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetQuick() bool {
+	if o == nil || o.Quick == nil {
+		var ret bool
+		return ret
+	}
+	return *o.Quick
+}
+
+// GetQuickOk returns a tuple with the Quick field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetQuickOk() (*bool, bool) {
+	if o == nil || o.Quick == nil {
+		return nil, false
+	}
+	return o.Quick, true
+}
+
+// HasQuick returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasQuick() bool {
+	if o != nil && o.Quick != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetQuick gets a reference to the given bool and assigns it to the Quick field.
+func (o *ImportOperationRequest) SetQuick(v bool) {
+	o.Quick = &v
+}
+
+// GetExtendedVerify returns the ExtendedVerify field value if set, zero value otherwise.
+func (o *ImportOperationRequest) GetExtendedVerify() bool {
+	if o == nil || o.ExtendedVerify == nil {
+		var ret bool
+		return ret
+	}
+	return *o.ExtendedVerify
+}
+
+// GetExtendedVerifyOk returns a tuple with the ExtendedVerify field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ImportOperationRequest) GetExtendedVerifyOk() (*bool, bool) {
+	if o == nil || o.ExtendedVerify == nil {
+		return nil, false
+	}
+	return o.ExtendedVerify, true
+}
+
+// HasExtendedVerify returns a boolean if a field has been set.
+func (o *ImportOperationRequest) HasExtendedVerify() bool {
+	if o != nil && o.ExtendedVerify != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExtendedVerify gets a reference to the given bool and assigns it to the ExtendedVerify field.
+func (o *ImportOperationRequest) SetExtendedVerify(v bool) {
+	o.ExtendedVerify = &v
+}
+
+func (o ImportOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if o.Keyspace != nil {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Table != nil {
+		toSerialize["table"] = o.Table
+	}
+	if true {
+		toSerialize["sourceDir"] = o.SourceDir
+	}
+	if o.KeepLevel != nil {
+		toSerialize["keepLevel"] = o.KeepLevel
+	}
+	if o.KeepRepaired != nil {
+		toSerialize["keepRepaired"] = o.KeepRepaired
+	}
+	if o.NoVerify != nil {
+		toSerialize["noVerify"] = o.NoVerify
+	}
+	if o.NoVerifyTokens != nil {
+		toSerialize["noVerifyTokens"] = o.NoVerifyTokens
+	}
+	if o.NoInvalidateCaches != nil {
+		toSerialize["noInvalidateCaches"] = o.NoInvalidateCaches
+	}
+	if o.Quick != nil {
+		toSerialize["quick"] = o.Quick
+	}
+	if o.ExtendedVerify != nil {
+		toSerialize["extendedVerify"] = o.ExtendedVerify
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableImportOperationRequest struct {
+	value *ImportOperationRequest
+	isSet bool
+}
+
+func (v NullableImportOperationRequest) Get() *ImportOperationRequest {
+	return v.value
+}
+
+func (v *NullableImportOperationRequest) Set(val *ImportOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableImportOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableImportOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableImportOperationRequest(val *ImportOperationRequest) *NullableImportOperationRequest {
+	return &NullableImportOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableImportOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableImportOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

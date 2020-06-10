@@ -12,7 +12,7 @@ cd resources/client_gen
 cd -
 
 echo Cleaning Cassandra Sidecar Go client
-mv ${wv_tmp_dir}/cassandrasidecar/go-client/* ${wv_tmp_dir}/cassandrasidecar && rm -rf ${wv_tmp_dir}/cassandrasidecar/go-client
+mv ${wv_tmp_dir}/cassandrasidecar/go-experimental-client/* ${wv_tmp_dir}/cassandrasidecar && rm -rf ${wv_tmp_dir}/cassandrasidecar/go-experimental-client
 rm -f ${wv_tmp_dir}/cassandrasidecar/go.sum
 rm -f ${wv_tmp_dir}/cassandrasidecar/git_push.sh
 

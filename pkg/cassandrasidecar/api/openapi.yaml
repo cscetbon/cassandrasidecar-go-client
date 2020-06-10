@@ -110,6 +110,7 @@ paths:
               - $ref: '#/components/schemas/TruncateOperationRequest'
               - $ref: '#/components/schemas/BackupOperationRequest'
               - $ref: '#/components/schemas/RestoreOperationRequest'
+              x-oneOf-name: OperationsPOST
       responses:
         200:
           content:
@@ -129,6 +130,7 @@ paths:
                 - $ref: '#/components/schemas/TruncateOperationResponse'
                 - $ref: '#/components/schemas/BackupOperationResponse'
                 - $ref: '#/components/schemas/RestoreOperationResponse'
+                x-oneOf-name: OperationsPOST200
           description: By calling this endpoint an operation is submitted for its
             execution
       summary: Submits an operation to this Sidecar

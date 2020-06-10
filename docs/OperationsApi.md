@@ -12,27 +12,23 @@ Method | HTTP request | Description
 
 ## OperationsGet
 
-> OperationsGet(ctx, optional)
+> OperationsGet(ctx).Type_(type_).Status(status).Execute()
 
 All operations of Sidecar
 
-### Required Parameters
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiOperationsGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***OperationsGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-
-Optional parameters are passed through a pointer to a OperationsGetOpts struct
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **type_** | [**optional.Interface of []string**](string.md)| type of operations to filter on | 
- **status** | [**optional.Interface of []string**](string.md)| status of operations to filter on | 
+ **type_** | [**[]string**](string.md) | type of operations to filter on | 
+ **status** | [**[]string**](string.md) | status of operations to filter on | 
 
 ### Return type
 
@@ -54,17 +50,26 @@ No authorization required
 
 ## OperationsOperationIdGet
 
-> OperationsOperationIdGet(ctx, operationId)
+> OperationsOperationIdGet(ctx, operationId).Execute()
 
 abc
 
-### Required Parameters
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**operationId** | [**string**](.md)| ID of operation to return | 
+**operationId** | [**string**](.md) | ID of operation to return | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiOperationsOperationIdGetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -86,30 +91,26 @@ No authorization required
 
 ## OperationsPost
 
-> OneOfCleanupOperationResponseDecommissionOperationResponseDrainOperationResponseFlushOperationResponseRebuildOperationResponseRefreshOperationResponseRestartOperationResponseScrubOperationResponseUpgradeSsTablesOperationResponseImportOperationResponseTruncateOperationResponseBackupOperationResponseRestoreOperationResponse OperationsPost(ctx, optional)
+> OperationsPOST200 OperationsPost(ctx).UNKNOWNBASETYPE(uNKNOWNBASETYPE).Execute()
 
 Submits an operation to this Sidecar
 
-### Required Parameters
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiOperationsPostRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***OperationsPostOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-
-Optional parameters are passed through a pointer to a OperationsPostOpts struct
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **uNKNOWNBASETYPE** | [**optional.Interface of UNKNOWN_BASE_TYPE**](UNKNOWN_BASE_TYPE.md)|  | 
+ **uNKNOWNBASETYPE** | [**UNKNOWN_BASE_TYPE**](UNKNOWN_BASE_TYPE.md) |  | 
 
 ### Return type
 
-[**OneOfCleanupOperationResponseDecommissionOperationResponseDrainOperationResponseFlushOperationResponseRebuildOperationResponseRefreshOperationResponseRestartOperationResponseScrubOperationResponseUpgradeSsTablesOperationResponseImportOperationResponseTruncateOperationResponseBackupOperationResponseRestoreOperationResponse**](oneOf&lt;CleanupOperationResponse,DecommissionOperationResponse,DrainOperationResponse,FlushOperationResponse,RebuildOperationResponse,RefreshOperationResponse,RestartOperationResponse,ScrubOperationResponse,UpgradeSSTablesOperationResponse,ImportOperationResponse,TruncateOperationResponse,BackupOperationResponse,RestoreOperationResponse&gt;.md)
+[**OperationsPOST200**](OperationsPOST200.md)
 
 ### Authorization
 

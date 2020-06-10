@@ -19,7 +19,7 @@ export wv_generator_url=http://api.openapi-generator.tech/api/gen
 
 echo Downloading go client for ${wv_openapi_yaml_url} from ${wv_generator_url}
 
-code=$(curl -X POST "${wv_generator_url}/clients/go" \
+code=$(curl -X POST "${wv_generator_url}/clients/go-experimental" \
   -H "Accept: */*" \
   -H "Content-Type: application/json" \
   -d "{ \"openAPIUrl\": \""${wv_openapi_yaml_url}"\", \"options\": { \"packageName\": \""${wv_client_name}"\", \"packageVersion\": \"1.0.0\" }}" | jq --raw-output '.code')

@@ -9,13 +9,202 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // CleanupOperationRequest triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces. 
 type CleanupOperationRequest struct {
 	Type string `json:"type"`
 	// keyspace to cleanup 
 	Keyspace string `json:"keyspace"`
 	// tables to cleanup, when not specified, all tables in a keyspace will be cleaned up 
-	Tables []string `json:"tables,omitempty"`
+	Tables *[]string `json:"tables,omitempty"`
 	// number of jobs to use, never uses more that concurrent_compactor threads 
-	Jobs int32 `json:"jobs,omitempty"`
+	Jobs *int32 `json:"jobs,omitempty"`
+}
+
+// NewCleanupOperationRequest instantiates a new CleanupOperationRequest object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewCleanupOperationRequest(type_ string, keyspace string, ) *CleanupOperationRequest {
+	this := CleanupOperationRequest{}
+	this.Type = type_
+	this.Keyspace = keyspace
+	return &this
+}
+
+// NewCleanupOperationRequestWithDefaults instantiates a new CleanupOperationRequest object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewCleanupOperationRequestWithDefaults() *CleanupOperationRequest {
+	this := CleanupOperationRequest{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *CleanupOperationRequest) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *CleanupOperationRequest) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *CleanupOperationRequest) SetType(v string) {
+	o.Type = v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *CleanupOperationRequest) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *CleanupOperationRequest) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *CleanupOperationRequest) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTables returns the Tables field value if set, zero value otherwise.
+func (o *CleanupOperationRequest) GetTables() []string {
+	if o == nil || o.Tables == nil {
+		var ret []string
+		return ret
+	}
+	return *o.Tables
+}
+
+// GetTablesOk returns a tuple with the Tables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CleanupOperationRequest) GetTablesOk() (*[]string, bool) {
+	if o == nil || o.Tables == nil {
+		return nil, false
+	}
+	return o.Tables, true
+}
+
+// HasTables returns a boolean if a field has been set.
+func (o *CleanupOperationRequest) HasTables() bool {
+	if o != nil && o.Tables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTables gets a reference to the given []string and assigns it to the Tables field.
+func (o *CleanupOperationRequest) SetTables(v []string) {
+	o.Tables = &v
+}
+
+// GetJobs returns the Jobs field value if set, zero value otherwise.
+func (o *CleanupOperationRequest) GetJobs() int32 {
+	if o == nil || o.Jobs == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Jobs
+}
+
+// GetJobsOk returns a tuple with the Jobs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CleanupOperationRequest) GetJobsOk() (*int32, bool) {
+	if o == nil || o.Jobs == nil {
+		return nil, false
+	}
+	return o.Jobs, true
+}
+
+// HasJobs returns a boolean if a field has been set.
+func (o *CleanupOperationRequest) HasJobs() bool {
+	if o != nil && o.Jobs != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetJobs gets a reference to the given int32 and assigns it to the Jobs field.
+func (o *CleanupOperationRequest) SetJobs(v int32) {
+	o.Jobs = &v
+}
+
+func (o CleanupOperationRequest) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Tables != nil {
+		toSerialize["tables"] = o.Tables
+	}
+	if o.Jobs != nil {
+		toSerialize["jobs"] = o.Jobs
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableCleanupOperationRequest struct {
+	value *CleanupOperationRequest
+	isSet bool
+}
+
+func (v NullableCleanupOperationRequest) Get() *CleanupOperationRequest {
+	return v.value
+}
+
+func (v *NullableCleanupOperationRequest) Set(val *CleanupOperationRequest) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableCleanupOperationRequest) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableCleanupOperationRequest) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableCleanupOperationRequest(val *CleanupOperationRequest) *NullableCleanupOperationRequest {
+	return &NullableCleanupOperationRequest{value: val, isSet: true}
+}
+
+func (v NullableCleanupOperationRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableCleanupOperationRequest) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

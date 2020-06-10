@@ -9,10 +9,129 @@
  */
 
 package cassandrasidecar
+
+import (
+	"encoding/json"
+)
+
 // TokenRange struct for TokenRange
 type TokenRange struct {
 	// starting token of a range 
 	Start string `json:"start"`
 	// ending token of a range 
 	End string `json:"end"`
+}
+
+// NewTokenRange instantiates a new TokenRange object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewTokenRange(start string, end string, ) *TokenRange {
+	this := TokenRange{}
+	this.Start = start
+	this.End = end
+	return &this
+}
+
+// NewTokenRangeWithDefaults instantiates a new TokenRange object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewTokenRangeWithDefaults() *TokenRange {
+	this := TokenRange{}
+	return &this
+}
+
+// GetStart returns the Start field value
+func (o *TokenRange) GetStart() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Start
+}
+
+// GetStartOk returns a tuple with the Start field value
+// and a boolean to check if the value has been set.
+func (o *TokenRange) GetStartOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Start, true
+}
+
+// SetStart sets field value
+func (o *TokenRange) SetStart(v string) {
+	o.Start = v
+}
+
+// GetEnd returns the End field value
+func (o *TokenRange) GetEnd() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.End
+}
+
+// GetEndOk returns a tuple with the End field value
+// and a boolean to check if the value has been set.
+func (o *TokenRange) GetEndOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.End, true
+}
+
+// SetEnd sets field value
+func (o *TokenRange) SetEnd(v string) {
+	o.End = v
+}
+
+func (o TokenRange) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["start"] = o.Start
+	}
+	if true {
+		toSerialize["end"] = o.End
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableTokenRange struct {
+	value *TokenRange
+	isSet bool
+}
+
+func (v NullableTokenRange) Get() *TokenRange {
+	return v.value
+}
+
+func (v *NullableTokenRange) Set(val *TokenRange) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableTokenRange) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableTokenRange) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableTokenRange(val *TokenRange) *NullableTokenRange {
+	return &NullableTokenRange{value: val, isSet: true}
+}
+
+func (v NullableTokenRange) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableTokenRange) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

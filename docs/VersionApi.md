@@ -13,13 +13,18 @@ Method | HTTP request | Description
 
 ## VersionCassandraGet
 
-> CassandraVersion VersionCassandraGet(ctx, )
+> CassandraVersion VersionCassandraGet(ctx).Execute()
 
 returns version of Cassandra node
 
-### Required Parameters
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVersionCassandraGetRequest struct via the builder pattern
+
 
 ### Return type
 
@@ -41,13 +46,18 @@ No authorization required
 
 ## VersionGet
 
-> SidecarVersion VersionGet(ctx, )
+> SidecarVersion VersionGet(ctx).Execute()
 
 returns version of Cassandra Sidecar itself
 
-### Required Parameters
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVersionGetRequest struct via the builder pattern
+
 
 ### Return type
 
@@ -69,13 +79,18 @@ No authorization required
 
 ## VersionSchemaGet
 
-> CassandraSchemaVersion VersionSchemaGet(ctx, )
+> CassandraSchemaVersion VersionSchemaGet(ctx).Execute()
 
 returns schema version this Cassandra node is on, same as calling StorageServiceMBean#getSchemaVersion
 
-### Required Parameters
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVersionSchemaGetRequest struct via the builder pattern
+
 
 ### Return type
 
@@ -97,13 +112,18 @@ No authorization required
 
 ## VersionSidecarGet
 
-> SidecarVersion VersionSidecarGet(ctx, )
+> SidecarVersion VersionSidecarGet(ctx).Execute()
 
 alias for /version endpoint, returns version of Cassandra Sidecar itself
 
-### Required Parameters
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVersionSidecarGetRequest struct via the builder pattern
+
 
 ### Return type
 

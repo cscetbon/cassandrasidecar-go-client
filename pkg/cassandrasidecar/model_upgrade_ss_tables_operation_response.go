@@ -9,11 +9,14 @@
  */
 
 package cassandrasidecar
+
 import (
+	"encoding/json"
 	"time"
 )
-// UpgradeSsTablesOperationResponse struct for UpgradeSsTablesOperationResponse
-type UpgradeSsTablesOperationResponse struct {
+
+// UpgradeSSTablesOperationResponse struct for UpgradeSSTablesOperationResponse
+type UpgradeSSTablesOperationResponse struct {
 	Type string `json:"type"`
 	// unique identifier of an operation, a random id is assigned to each operation after a request is submitted, from caller's perspective, an id is sent back as a response to his request so he can further query state of that operation, referencing id, by operations/{id} endpoint 
 	Id string `json:"id"`
@@ -24,17 +27,453 @@ type UpgradeSsTablesOperationResponse struct {
 	// timestamp telling when this operation was created on Sidecar's side 
 	CreationTime time.Time `json:"creationTime"`
 	// timestamp telling when this operation was started by Sidecar, if an operation is created, it does not necessarily mean that it will be started right away, in most cases it is the case but if e.g. ExecutorService is full on its working thread, an execution of an operation is postponed and start time is updated only after that 
-	StartTime time.Time `json:"startTime,omitempty"`
+	StartTime *time.Time `json:"startTime,omitempty"`
 	// timestamp telling when an operation has finished, irrelevant of its result, an operation can be failed and it would still have this field populated. 
-	CompletionTime time.Time `json:"completionTime,omitempty"`
+	CompletionTime *time.Time `json:"completionTime,omitempty"`
 	// This field contains serialized java.lang.Throwable in case this operation has failed 
-	FailureCause map[string]interface{} `json:"failureCause,omitempty"`
+	FailureCause *map[string]interface{} `json:"failureCause,omitempty"`
 	// keyspace to upgrade SSTables of 
 	Keyspace string `json:"keyspace"`
 	// an array of tables to upgrade SSTables of, empty or not provided array will default to upgrading of SSTables of all tables in respective keyspace 
-	Tables []string `json:"tables,omitempty"`
+	Tables *[]string `json:"tables,omitempty"`
 	// the number of threads to use - 0 means use all available, it never uses more than concurrent_compactor threads 
-	Jobs int32 `json:"jobs,omitempty"`
+	Jobs *int32 `json:"jobs,omitempty"`
 	// include all sstables, even those already on the current version, defaults to false
-	IncludeAllSStables bool `json:"includeAllSStables,omitempty"`
+	IncludeAllSStables *bool `json:"includeAllSStables,omitempty"`
+}
+
+// NewUpgradeSSTablesOperationResponse instantiates a new UpgradeSSTablesOperationResponse object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewUpgradeSSTablesOperationResponse(type_ string, id string, state string, progress float32, creationTime time.Time, keyspace string, ) *UpgradeSSTablesOperationResponse {
+	this := UpgradeSSTablesOperationResponse{}
+	this.Type = type_
+	this.Id = id
+	this.State = state
+	this.Progress = progress
+	this.CreationTime = creationTime
+	this.Keyspace = keyspace
+	return &this
+}
+
+// NewUpgradeSSTablesOperationResponseWithDefaults instantiates a new UpgradeSSTablesOperationResponse object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewUpgradeSSTablesOperationResponseWithDefaults() *UpgradeSSTablesOperationResponse {
+	this := UpgradeSSTablesOperationResponse{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *UpgradeSSTablesOperationResponse) GetType() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetTypeOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Type, true
+}
+
+// SetType sets field value
+func (o *UpgradeSSTablesOperationResponse) SetType(v string) {
+	o.Type = v
+}
+
+// GetId returns the Id field value
+func (o *UpgradeSSTablesOperationResponse) GetId() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *UpgradeSSTablesOperationResponse) SetId(v string) {
+	o.Id = v
+}
+
+// GetState returns the State field value
+func (o *UpgradeSSTablesOperationResponse) GetState() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.State
+}
+
+// GetStateOk returns a tuple with the State field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetStateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.State, true
+}
+
+// SetState sets field value
+func (o *UpgradeSSTablesOperationResponse) SetState(v string) {
+	o.State = v
+}
+
+// GetProgress returns the Progress field value
+func (o *UpgradeSSTablesOperationResponse) GetProgress() float32 {
+	if o == nil  {
+		var ret float32
+		return ret
+	}
+
+	return o.Progress
+}
+
+// GetProgressOk returns a tuple with the Progress field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetProgressOk() (*float32, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Progress, true
+}
+
+// SetProgress sets field value
+func (o *UpgradeSSTablesOperationResponse) SetProgress(v float32) {
+	o.Progress = v
+}
+
+// GetCreationTime returns the CreationTime field value
+func (o *UpgradeSSTablesOperationResponse) GetCreationTime() time.Time {
+	if o == nil  {
+		var ret time.Time
+		return ret
+	}
+
+	return o.CreationTime
+}
+
+// GetCreationTimeOk returns a tuple with the CreationTime field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetCreationTimeOk() (*time.Time, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CreationTime, true
+}
+
+// SetCreationTime sets field value
+func (o *UpgradeSSTablesOperationResponse) SetCreationTime(v time.Time) {
+	o.CreationTime = v
+}
+
+// GetStartTime returns the StartTime field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationResponse) GetStartTime() time.Time {
+	if o == nil || o.StartTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.StartTime
+}
+
+// GetStartTimeOk returns a tuple with the StartTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetStartTimeOk() (*time.Time, bool) {
+	if o == nil || o.StartTime == nil {
+		return nil, false
+	}
+	return o.StartTime, true
+}
+
+// HasStartTime returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationResponse) HasStartTime() bool {
+	if o != nil && o.StartTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStartTime gets a reference to the given time.Time and assigns it to the StartTime field.
+func (o *UpgradeSSTablesOperationResponse) SetStartTime(v time.Time) {
+	o.StartTime = &v
+}
+
+// GetCompletionTime returns the CompletionTime field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationResponse) GetCompletionTime() time.Time {
+	if o == nil || o.CompletionTime == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CompletionTime
+}
+
+// GetCompletionTimeOk returns a tuple with the CompletionTime field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetCompletionTimeOk() (*time.Time, bool) {
+	if o == nil || o.CompletionTime == nil {
+		return nil, false
+	}
+	return o.CompletionTime, true
+}
+
+// HasCompletionTime returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationResponse) HasCompletionTime() bool {
+	if o != nil && o.CompletionTime != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCompletionTime gets a reference to the given time.Time and assigns it to the CompletionTime field.
+func (o *UpgradeSSTablesOperationResponse) SetCompletionTime(v time.Time) {
+	o.CompletionTime = &v
+}
+
+// GetFailureCause returns the FailureCause field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationResponse) GetFailureCause() map[string]interface{} {
+	if o == nil || o.FailureCause == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return *o.FailureCause
+}
+
+// GetFailureCauseOk returns a tuple with the FailureCause field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetFailureCauseOk() (*map[string]interface{}, bool) {
+	if o == nil || o.FailureCause == nil {
+		return nil, false
+	}
+	return o.FailureCause, true
+}
+
+// HasFailureCause returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationResponse) HasFailureCause() bool {
+	if o != nil && o.FailureCause != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureCause gets a reference to the given map[string]interface{} and assigns it to the FailureCause field.
+func (o *UpgradeSSTablesOperationResponse) SetFailureCause(v map[string]interface{}) {
+	o.FailureCause = &v
+}
+
+// GetKeyspace returns the Keyspace field value
+func (o *UpgradeSSTablesOperationResponse) GetKeyspace() string {
+	if o == nil  {
+		var ret string
+		return ret
+	}
+
+	return o.Keyspace
+}
+
+// GetKeyspaceOk returns a tuple with the Keyspace field value
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetKeyspaceOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Keyspace, true
+}
+
+// SetKeyspace sets field value
+func (o *UpgradeSSTablesOperationResponse) SetKeyspace(v string) {
+	o.Keyspace = v
+}
+
+// GetTables returns the Tables field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationResponse) GetTables() []string {
+	if o == nil || o.Tables == nil {
+		var ret []string
+		return ret
+	}
+	return *o.Tables
+}
+
+// GetTablesOk returns a tuple with the Tables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetTablesOk() (*[]string, bool) {
+	if o == nil || o.Tables == nil {
+		return nil, false
+	}
+	return o.Tables, true
+}
+
+// HasTables returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationResponse) HasTables() bool {
+	if o != nil && o.Tables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetTables gets a reference to the given []string and assigns it to the Tables field.
+func (o *UpgradeSSTablesOperationResponse) SetTables(v []string) {
+	o.Tables = &v
+}
+
+// GetJobs returns the Jobs field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationResponse) GetJobs() int32 {
+	if o == nil || o.Jobs == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Jobs
+}
+
+// GetJobsOk returns a tuple with the Jobs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetJobsOk() (*int32, bool) {
+	if o == nil || o.Jobs == nil {
+		return nil, false
+	}
+	return o.Jobs, true
+}
+
+// HasJobs returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationResponse) HasJobs() bool {
+	if o != nil && o.Jobs != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetJobs gets a reference to the given int32 and assigns it to the Jobs field.
+func (o *UpgradeSSTablesOperationResponse) SetJobs(v int32) {
+	o.Jobs = &v
+}
+
+// GetIncludeAllSStables returns the IncludeAllSStables field value if set, zero value otherwise.
+func (o *UpgradeSSTablesOperationResponse) GetIncludeAllSStables() bool {
+	if o == nil || o.IncludeAllSStables == nil {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeAllSStables
+}
+
+// GetIncludeAllSStablesOk returns a tuple with the IncludeAllSStables field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpgradeSSTablesOperationResponse) GetIncludeAllSStablesOk() (*bool, bool) {
+	if o == nil || o.IncludeAllSStables == nil {
+		return nil, false
+	}
+	return o.IncludeAllSStables, true
+}
+
+// HasIncludeAllSStables returns a boolean if a field has been set.
+func (o *UpgradeSSTablesOperationResponse) HasIncludeAllSStables() bool {
+	if o != nil && o.IncludeAllSStables != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeAllSStables gets a reference to the given bool and assigns it to the IncludeAllSStables field.
+func (o *UpgradeSSTablesOperationResponse) SetIncludeAllSStables(v bool) {
+	o.IncludeAllSStables = &v
+}
+
+func (o UpgradeSSTablesOperationResponse) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["type"] = o.Type
+	}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["state"] = o.State
+	}
+	if true {
+		toSerialize["progress"] = o.Progress
+	}
+	if true {
+		toSerialize["creationTime"] = o.CreationTime
+	}
+	if o.StartTime != nil {
+		toSerialize["startTime"] = o.StartTime
+	}
+	if o.CompletionTime != nil {
+		toSerialize["completionTime"] = o.CompletionTime
+	}
+	if o.FailureCause != nil {
+		toSerialize["failureCause"] = o.FailureCause
+	}
+	if true {
+		toSerialize["keyspace"] = o.Keyspace
+	}
+	if o.Tables != nil {
+		toSerialize["tables"] = o.Tables
+	}
+	if o.Jobs != nil {
+		toSerialize["jobs"] = o.Jobs
+	}
+	if o.IncludeAllSStables != nil {
+		toSerialize["includeAllSStables"] = o.IncludeAllSStables
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableUpgradeSSTablesOperationResponse struct {
+	value *UpgradeSSTablesOperationResponse
+	isSet bool
+}
+
+func (v NullableUpgradeSSTablesOperationResponse) Get() *UpgradeSSTablesOperationResponse {
+	return v.value
+}
+
+func (v *NullableUpgradeSSTablesOperationResponse) Set(val *UpgradeSSTablesOperationResponse) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableUpgradeSSTablesOperationResponse) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableUpgradeSSTablesOperationResponse) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableUpgradeSSTablesOperationResponse(val *UpgradeSSTablesOperationResponse) *NullableUpgradeSSTablesOperationResponse {
+	return &NullableUpgradeSSTablesOperationResponse{value: val, isSet: true}
+}
+
+func (v NullableUpgradeSSTablesOperationResponse) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableUpgradeSSTablesOperationResponse) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }
