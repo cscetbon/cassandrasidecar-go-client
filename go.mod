@@ -1,4 +1,4 @@
-module github.com/erdrix/cassandrasidecar-go-client
+module github.com/cscetbon/cassandrasidecar-go-client
 
 go 1.13
 
